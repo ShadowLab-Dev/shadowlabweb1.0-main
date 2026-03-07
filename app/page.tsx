@@ -1,65 +1,146 @@
-import Image from "next/image";
+﻿const offerings = [
+  {
+    title: "Web Platforms",
+    description:
+      "Conversion-focused sites and SaaS frontends engineered for speed, scale, and maintainability.",
+  },
+  {
+    title: "Product Engineering",
+    description:
+      "From MVP to mature product: architecture, delivery systems, and iterative feature development.",
+  },
+  {
+    title: "Design Systems",
+    description:
+      "Reusable UI foundations that keep product teams shipping quickly without breaking consistency.",
+  },
+];
+
+const metrics = [
+  { value: "95+", label: "Lighthouse score baseline" },
+  { value: "3x", label: "Faster release velocity targets" },
+  { value: "24/7", label: "Performance monitoring mindset" },
+  { value: "0 to 1", label: "End-to-end product ownership" },
+];
+
+const projects = [
+  {
+    name: "Pulseboard",
+    type: "Analytics Dashboard",
+    summary:
+      "Unified product, marketing, and revenue intelligence into a real-time executive control center.",
+  },
+  {
+    name: "ForgeOps",
+    type: "Operations Platform",
+    summary:
+      "Replaced spreadsheet-heavy workflows with a resilient internal platform and automated reporting.",
+  },
+  {
+    name: "Cipher Commerce",
+    type: "E-commerce Stack",
+    summary:
+      "Built a modular storefront architecture with rapid campaign deployment and measurable conversion lift.",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="site-shell">
+      <div className="bg-orb bg-orb-a" aria-hidden />
+      <div className="bg-orb bg-orb-b" aria-hidden />
+
+      <header className="site-header">
+        <a className="brand" href="#top">
+          <span className="brand-mark">S</span>
+          <span>shadowlab.dev</span>
+        </a>
+        <nav className="top-nav" aria-label="Primary">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section className="hero section">
+          <p className="eyebrow">Independent Digital Product Studio</p>
+          <h1>
+            We build bold web experiences for teams that move fast.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="hero-copy">
+            Shadowlab partners with startups and established companies to
+            design, engineer, and scale digital products that are fast,
+            memorable, and production-ready.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+          <div className="hero-actions">
+            <a className="btn btn-primary" href="#contact">
+              Start a Project
+            </a>
+            <a className="btn btn-ghost" href="#work">
+              View Case Studies
+            </a>
+          </div>
+        </section>
+
+        <section id="services" className="section">
+          <div className="section-head">
+            <p className="eyebrow">Capabilities</p>
+            <h2>Built for product teams with high standards.</h2>
+          </div>
+          <div className="card-grid">
+            {offerings.map((item) => (
+              <article key={item.title} className="card reveal-up">
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="section stats-section">
+          <div className="stats-grid">
+            {metrics.map((metric) => (
+              <article key={metric.label} className="stat-card reveal-up">
+                <p className="stat-value">{metric.value}</p>
+                <p className="stat-label">{metric.label}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="work" className="section">
+          <div className="section-head">
+            <p className="eyebrow">Selected Work</p>
+            <h2>Practical outcomes, not just polished mockups.</h2>
+          </div>
+          <div className="project-grid">
+            {projects.map((project) => (
+              <article key={project.name} className="project-card reveal-up">
+                <p className="project-type">{project.type}</p>
+                <h3>{project.name}</h3>
+                <p>{project.summary}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="contact" className="section contact-section">
+          <p className="eyebrow">Let&apos;s Build</p>
+          <h2>Need a partner who can ship and scale with you?</h2>
+          <p>
+            Tell us what you are building and where the current bottlenecks are.
+            We will map a delivery plan and start quickly.
+          </p>
+          <a className="btn btn-primary" href="mailto:hello@shadowlab.dev">
+            hello@shadowlab.dev
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        </section>
       </main>
+
+      <footer className="site-footer">
+        <p>© {new Date().getFullYear()} Shadowlab. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
