@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "shadowlab.dev | Digital Products and Platforms",
+  title: "Shadow Lab",
   description:
-    "Shadowlab builds high-performance digital products, design systems, and platform experiences for ambitious teams.",
+    "Welcome To The Shadow Lab Testing Ground!",
 };
 
 export default function RootLayout({
