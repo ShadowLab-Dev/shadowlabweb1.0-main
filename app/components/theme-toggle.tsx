@@ -228,8 +228,9 @@ export default function ThemeToggle() {
 
   useEffect(() => {
     const storedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
-    const initialMode: ThemeMode = isThemeMode(storedMode ?? "")
-      ? storedMode
+    const storedModeCandidate = storedMode ?? "";
+    const initialMode: ThemeMode = isThemeMode(storedModeCandidate)
+      ? storedModeCandidate
       : getSystemTheme();
 
     const presets =
@@ -248,7 +249,8 @@ export default function ThemeToggle() {
 
     const handleSystemThemeChange = (event: MediaQueryListEvent) => {
       const savedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
-      if (isThemeMode(savedMode ?? "")) {
+      const savedModeCandidate = savedMode ?? "";
+      if (isThemeMode(savedModeCandidate)) {
         return;
       }
 
