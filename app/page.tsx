@@ -625,14 +625,13 @@ export default function Home() {
           <button
             type="button"
             className={`reveal-games-button ${gamesRevealed ? "is-open" : ""}`}
-            onClick={() => setGamesRevealed(true)}
+            onClick={() => setGamesRevealed((current) => !current)}
             aria-expanded={gamesRevealed}
             aria-controls="games-grid-panel"
-            disabled={gamesRevealed}
           >
             <span>{gamesRevealed ? "Games Revealed" : "Reveal Web Games"}</span>
             <small>
-              {gamesRevealed ? "Arcade unlocked. All games are live." : "Tap to reveal all 9 games."}
+              {gamesRevealed ? "Arcade unlocked. Tap again to close." : "Tap to reveal all 9 games."}
             </small>
           </button>
         </div>

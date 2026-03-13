@@ -121,18 +121,18 @@ function parseStoredBackground(raw: string | null): ReactorBackgroundState | nul
     };
 
     return {
-      glowStrength: clamp(numberOrFallback(parsed.glowStrength, DEFAULT_REACTOR_STATE.glowStrength), 20, 100),
-      gridDensity: clamp(numberOrFallback(parsed.gridDensity, DEFAULT_REACTOR_STATE.gridDensity), 18, 58),
-      driftAmount: clamp(numberOrFallback(parsed.driftAmount, DEFAULT_REACTOR_STATE.driftAmount), 0, 18),
-      motionTempo: clamp(numberOrFallback(parsed.motionTempo, DEFAULT_REACTOR_STATE.motionTempo), 20, 100),
-      gridPresence: clamp(numberOrFallback(parsed.gridPresence, DEFAULT_REACTOR_STATE.gridPresence), 20, 100),
-      orbitOffset: clamp(numberOrFallback(parsed.orbitOffset, DEFAULT_REACTOR_STATE.orbitOffset), -40, 40),
-      gradientTilt: clamp(numberOrFallback(parsed.gradientTilt, DEFAULT_REACTOR_STATE.gradientTilt), 140, 200),
-      blobScale: clamp(numberOrFallback(parsed.blobScale, DEFAULT_REACTOR_STATE.blobScale), 70, 140),
-      gridTilt: clamp(numberOrFallback(parsed.gridTilt, DEFAULT_REACTOR_STATE.gridTilt), -18, 18),
-      atmosphere: clamp(numberOrFallback(parsed.atmosphere, DEFAULT_REACTOR_STATE.atmosphere), 8, 40),
-      vignette: clamp(numberOrFallback(parsed.vignette, DEFAULT_REACTOR_STATE.vignette), 0, 44),
-      axisShift: clamp(numberOrFallback(parsed.axisShift, DEFAULT_REACTOR_STATE.axisShift), -24, 24),
+      glowStrength: clamp(numberOrFallback(parsed.glowStrength, DEFAULT_REACTOR_STATE.glowStrength), 10, 140),
+      gridDensity: clamp(numberOrFallback(parsed.gridDensity, DEFAULT_REACTOR_STATE.gridDensity), 10, 90),
+      driftAmount: clamp(numberOrFallback(parsed.driftAmount, DEFAULT_REACTOR_STATE.driftAmount), 0, 32),
+      motionTempo: clamp(numberOrFallback(parsed.motionTempo, DEFAULT_REACTOR_STATE.motionTempo), 10, 140),
+      gridPresence: clamp(numberOrFallback(parsed.gridPresence, DEFAULT_REACTOR_STATE.gridPresence), 0, 100),
+      orbitOffset: clamp(numberOrFallback(parsed.orbitOffset, DEFAULT_REACTOR_STATE.orbitOffset), -80, 80),
+      gradientTilt: clamp(numberOrFallback(parsed.gradientTilt, DEFAULT_REACTOR_STATE.gradientTilt), 90, 260),
+      blobScale: clamp(numberOrFallback(parsed.blobScale, DEFAULT_REACTOR_STATE.blobScale), 40, 220),
+      gridTilt: clamp(numberOrFallback(parsed.gridTilt, DEFAULT_REACTOR_STATE.gridTilt), -35, 35),
+      atmosphere: clamp(numberOrFallback(parsed.atmosphere, DEFAULT_REACTOR_STATE.atmosphere), 0, 70),
+      vignette: clamp(numberOrFallback(parsed.vignette, DEFAULT_REACTOR_STATE.vignette), 0, 80),
+      axisShift: clamp(numberOrFallback(parsed.axisShift, DEFAULT_REACTOR_STATE.axisShift), -60, 60),
     };
   } catch {
     return null;
@@ -281,8 +281,8 @@ export default function Page() {
                 Glow Strength <span>{glowStrength}</span>
                 <input
                   type="range"
-                  min={20}
-                  max={100}
+                  min={10}
+                  max={140}
                   value={glowStrength}
                   onChange={(event) => setGlowStrength(Number(event.target.value))}
                 />
@@ -292,8 +292,8 @@ export default function Page() {
                 Grid Density <span>{gridDensity}px</span>
                 <input
                   type="range"
-                  min={18}
-                  max={58}
+                  min={10}
+                  max={90}
                   value={gridDensity}
                   onChange={(event) => setGridDensity(Number(event.target.value))}
                 />
@@ -304,7 +304,7 @@ export default function Page() {
                 <input
                   type="range"
                   min={0}
-                  max={18}
+                  max={32}
                   value={driftAmount}
                   onChange={(event) => setDriftAmount(Number(event.target.value))}
                 />
@@ -314,8 +314,8 @@ export default function Page() {
                 Motion Tempo <span>{motionTempo}</span>
                 <input
                   type="range"
-                  min={20}
-                  max={100}
+                  min={10}
+                  max={140}
                   value={motionTempo}
                   onChange={(event) => setMotionTempo(Number(event.target.value))}
                 />
@@ -325,7 +325,7 @@ export default function Page() {
                 Grid Presence <span>{gridPresence}%</span>
                 <input
                   type="range"
-                  min={20}
+                  min={0}
                   max={100}
                   value={gridPresence}
                   onChange={(event) => setGridPresence(Number(event.target.value))}
@@ -336,8 +336,8 @@ export default function Page() {
                 Orbit Offset <span>{orbitOffset}px</span>
                 <input
                   type="range"
-                  min={-40}
-                  max={40}
+                  min={-80}
+                  max={80}
                   value={orbitOffset}
                   onChange={(event) => setOrbitOffset(Number(event.target.value))}
                 />
@@ -347,8 +347,8 @@ export default function Page() {
                 Gradient Tilt <span>{gradientTilt}deg</span>
                 <input
                   type="range"
-                  min={140}
-                  max={200}
+                  min={90}
+                  max={260}
                   value={gradientTilt}
                   onChange={(event) => setGradientTilt(Number(event.target.value))}
                 />
@@ -358,8 +358,8 @@ export default function Page() {
                 Blob Scale <span>{blobScale}%</span>
                 <input
                   type="range"
-                  min={70}
-                  max={140}
+                  min={40}
+                  max={220}
                   value={blobScale}
                   onChange={(event) => setBlobScale(Number(event.target.value))}
                 />
@@ -369,8 +369,8 @@ export default function Page() {
                 Grid Tilt <span>{gridTilt}deg</span>
                 <input
                   type="range"
-                  min={-18}
-                  max={18}
+                  min={-35}
+                  max={35}
                   value={gridTilt}
                   onChange={(event) => setGridTilt(Number(event.target.value))}
                 />
@@ -380,8 +380,8 @@ export default function Page() {
                 Atmosphere <span>{atmosphere}%</span>
                 <input
                   type="range"
-                  min={8}
-                  max={40}
+                  min={0}
+                  max={70}
                   value={atmosphere}
                   onChange={(event) => setAtmosphere(Number(event.target.value))}
                 />
@@ -392,7 +392,7 @@ export default function Page() {
                 <input
                   type="range"
                   min={0}
-                  max={44}
+                  max={80}
                   value={vignette}
                   onChange={(event) => setVignette(Number(event.target.value))}
                 />
@@ -402,8 +402,8 @@ export default function Page() {
                 Axis Shift <span>{axisShift}px</span>
                 <input
                   type="range"
-                  min={-24}
-                  max={24}
+                  min={-60}
+                  max={60}
                   value={axisShift}
                   onChange={(event) => setAxisShift(Number(event.target.value))}
                 />

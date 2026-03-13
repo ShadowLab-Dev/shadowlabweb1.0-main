@@ -937,7 +937,7 @@ h1 {
 
 .reveal-games-button {
   position: relative;
-  width: min(360px, 100%);
+  width: 100%;
   border-radius: 14px;
   border: 1px solid var(--line-strong);
   padding: 0.8rem 0.95rem;

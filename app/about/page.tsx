@@ -2,52 +2,28 @@ import Link from "next/link";
 
 const archiveNodes = [
   {
-    name: "FMHY",
+    name: "fmhy",
     url: "https://fmhy.net/",
     category: "Resource Atlas",
     note: "Massive discovery index with practical tools and deep link trails.",
   },
   {
-    name: "Codrops",
-    url: "https://tympanus.net/codrops/",
-    category: "Creative Dev",
-    note: "Excellent references for interactive layouts and experimental UI motion.",
+    name: "ToS;DR",
+    url: "https://tosdr.org/en",
+    category: "Privacy Intel",
+    note: "Service terms transparency ratings and summaries for safer browsing choices.",
   },
   {
-    name: "Awwwards",
-    url: "https://www.awwwards.com/",
-    category: "Showcase",
-    note: "Great for tracking current patterns in high-end visual web design.",
+    name: "No Hello",
+    url: "https://nohello.net/",
+    category: "Comms Protocol",
+    note: "A concise etiquette reference for clearer, faster chat collaboration.",
   },
   {
-    name: "Godly",
-    url: "https://godly.website/",
-    category: "Curated Gallery",
-    note: "Strong curation of modern styles, interfaces, and direction shifts.",
-  },
-  {
-    name: "Hoverstat.es",
-    url: "https://www.hoverstat.es/",
-    category: "Interaction Index",
-    note: "Quick scan of animation-forward sites sorted by visual language.",
-  },
-  {
-    name: "Httpster",
-    url: "https://httpster.net/",
-    category: "Archive",
-    note: "Long-running index for finding unusual and memorable web aesthetics.",
-  },
-  {
-    name: "Lapa Ninja",
-    url: "https://www.lapa.ninja/",
-    category: "Landing References",
-    note: "Useful for component ideas, hierarchy, and conversion-friendly layouts.",
-  },
-  {
-    name: "CSS Design Awards",
-    url: "https://www.cssdesignawards.com/",
-    category: "Award Feed",
-    note: "Helpful benchmark for polished production visuals and transitions.",
+    name: "Don't Ask To Ask",
+    url: "https://dontasktoask.com/",
+    category: "Help Signal",
+    note: "Simple guidance on asking technical questions that get better responses.",
   },
 ];
 
