@@ -3,7 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 
 type ThemeMode = "dark" | "light";
-type ThemeVariant = "default" | "neon" | "ember" | "glacier" | "dawn";
+type ThemeVariant =
+  | "default"
+  | "neon"
+  | "ember"
+  | "void"
+  | "cobalt"
+  | "matrix"
+  | "glacier"
+  | "dawn"
+  | "solar"
+  | "mint"
+  | "rose";
 type ThemePresetMap = {
   dark: ThemeVariant;
   light: ThemeVariant;
@@ -12,18 +23,50 @@ type ThemePresetMap = {
 const STORAGE_MODE_KEY = "shadowlab-theme";
 const STORAGE_PRESETS_KEY = "shadowlab-theme-presets";
 
+const DARK_VARIANTS: ThemeVariant[] = [
+  "default",
+  "neon",
+  "ember",
+  "void",
+  "cobalt",
+  "matrix",
+];
+
+const LIGHT_VARIANTS: ThemeVariant[] = [
+  "default",
+  "glacier",
+  "dawn",
+  "solar",
+  "mint",
+  "rose",
+];
+
 const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
   dark: [
     { id: "default", label: "Core Dark" },
     { id: "neon", label: "Neon Dark" },
     { id: "ember", label: "Ember Dark" },
+    { id: "void", label: "Void Dark" },
+    { id: "cobalt", label: "Cobalt Dark" },
+    { id: "matrix", label: "Matrix Dark" },
   ],
   light: [
     { id: "default", label: "Core Light" },
     { id: "glacier", label: "Glacier Light" },
     { id: "dawn", label: "Dawn Light" },
+    { id: "solar", label: "Solar Light" },
+    { id: "mint", label: "Mint Light" },
+    { id: "rose", label: "Rose Light" },
   ],
 };
+
+function isDarkVariant(variant: ThemeVariant): boolean {
+  return DARK_VARIANTS.includes(variant);
+}
+
+function isLightVariant(variant: ThemeVariant): boolean {
+  return LIGHT_VARIANTS.includes(variant);
+}
 
 function getSystemTheme(): ThemeMode {
   if (typeof window === "undefined") {
@@ -50,8 +93,8 @@ function parsePresetMap(raw: string | null): ThemePresetMap | null {
     const dark = parsed.dark ?? "default";
     const light = parsed.light ?? "default";
     return {
-      dark: dark === "default" || dark === "neon" || dark === "ember" ? dark : "default",
-      light: light === "default" || light === "glacier" || light === "dawn" ? light : "default",
+      dark: isDarkVariant(dark) ? dark : "default",
+      light: isLightVariant(light) ? light : "default",
     };
   } catch {
     return null;
