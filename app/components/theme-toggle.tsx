@@ -2,88 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type ThemeMode = "dark" | "light";
-type ThemeVariant =
-  | "default"
-  | "neon"
-  | "ember"
-  | "void"
-  | "cobalt"
-  | "matrix"
-  | "shadow"
-  | "ultraviolet"
-  | "storm"
-  | "alloy"
-  | "inferno"
-  | "midnight"
-  | "abyss"
-  | "royal"
-  | "acid"
-  | "carbon"
-  | "crimson"
-  | "arctic"
-  | "glacier"
-  | "dawn"
-  | "solar"
-  | "mint"
-  | "rose"
-  | "pearl"
-  | "citrus"
-  | "sky"
-  | "lavender"
-  | "sand"
-  | "mono"
-  | "coral"
-  | "ocean"
-  | "orchid"
-  | "forest"
-  | "cherry"
-  | "ivory"
-  | "obsidian"
-  | "phantom"
-  | "aurora"
-  | "voltage"
-  | "magma"
-  | "ion"
-  | "onyx"
-  | "cyber"
-  | "twilight"
-  | "synthwave"
-  | "deepsea"
-  | "toxic"
-  | "zenith"
-  | "embercore"
-  | "nightfall"
-  | "quantum"
-  | "arcane"
-  | "monsoon"
-  | "cloud"
-  | "frost"
-  | "sunset"
-  | "meadow"
-  | "lagoon"
-  | "blush"
-  | "linen"
-  | "sakura"
-  | "candy"
-  | "apricot"
-  | "teal"
-  | "lilac"
-  | "slate"
-  | "honey"
-  | "spruce"
-  | "plum"
-  | "aqua"
-  | "copper";
-type ThemePresetMap = {
-  dark: ThemeVariant;
-  light: ThemeVariant;
-};
-
-const STORAGE_MODE_KEY = "shadowlab-theme";
-const STORAGE_PRESETS_KEY = "shadowlab-theme-presets";
-
-const DARK_VARIANTS: ThemeVariant[] = [
+const DARK_VARIANTS = [
   "default",
   "neon",
   "ember",
@@ -120,9 +39,9 @@ const DARK_VARIANTS: ThemeVariant[] = [
   "quantum",
   "arcane",
   "monsoon",
-];
+] as const;
 
-const LIGHT_VARIANTS: ThemeVariant[] = [
+const LIGHT_VARIANTS = [
   "default",
   "glacier",
   "dawn",
@@ -159,96 +78,79 @@ const LIGHT_VARIANTS: ThemeVariant[] = [
   "plum",
   "aqua",
   "copper",
-];
+] as const;
 
-const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
-  dark: [
-    { id: "default", label: "Core Dark" },
-    { id: "neon", label: "Neon Dark" },
-    { id: "ember", label: "Ember Dark" },
-    { id: "void", label: "Void Dark" },
-    { id: "cobalt", label: "Cobalt Dark" },
-    { id: "matrix", label: "Matrix Dark" },
-    { id: "shadow", label: "Shadow Dark" },
-    { id: "ultraviolet", label: "Ultraviolet Dark" },
-    { id: "storm", label: "Storm Dark" },
-    { id: "alloy", label: "Alloy Dark" },
-    { id: "inferno", label: "Inferno Dark" },
-    { id: "midnight", label: "Midnight Dark" },
-    { id: "abyss", label: "Abyss Dark" },
-    { id: "royal", label: "Royal Dark" },
-    { id: "acid", label: "Acid Dark" },
-    { id: "carbon", label: "Carbon Dark" },
-    { id: "crimson", label: "Crimson Dark" },
-    { id: "arctic", label: "Arctic Dark" },
-    { id: "obsidian", label: "Obsidian Dark" },
-    { id: "phantom", label: "Phantom Dark" },
-    { id: "aurora", label: "Aurora Dark" },
-    { id: "voltage", label: "Voltage Dark" },
-    { id: "magma", label: "Magma Dark" },
-    { id: "ion", label: "Ion Dark" },
-    { id: "onyx", label: "Onyx Dark" },
-    { id: "cyber", label: "Cyber Dark" },
-    { id: "twilight", label: "Twilight Dark" },
-    { id: "synthwave", label: "Synthwave Dark" },
-    { id: "deepsea", label: "Deepsea Dark" },
-    { id: "toxic", label: "Toxic Dark" },
-    { id: "zenith", label: "Zenith Dark" },
-    { id: "embercore", label: "Embercore Dark" },
-    { id: "nightfall", label: "Nightfall Dark" },
-    { id: "quantum", label: "Quantum Dark" },
-    { id: "arcane", label: "Arcane Dark" },
-    { id: "monsoon", label: "Monsoon Dark" },
-  ],
-  light: [
-    { id: "default", label: "Core Light" },
-    { id: "glacier", label: "Glacier Light" },
-    { id: "dawn", label: "Dawn Light" },
-    { id: "solar", label: "Solar Light" },
-    { id: "mint", label: "Mint Light" },
-    { id: "rose", label: "Rose Light" },
-    { id: "pearl", label: "Pearl Light" },
-    { id: "citrus", label: "Citrus Light" },
-    { id: "sky", label: "Sky Light" },
-    { id: "lavender", label: "Lavender Light" },
-    { id: "sand", label: "Sand Light" },
-    { id: "mono", label: "Mono Light" },
-    { id: "coral", label: "Coral Light" },
-    { id: "ocean", label: "Ocean Light" },
-    { id: "orchid", label: "Orchid Light" },
-    { id: "forest", label: "Forest Light" },
-    { id: "cherry", label: "Cherry Light" },
-    { id: "ivory", label: "Ivory Light" },
-    { id: "cloud", label: "Cloud Light" },
-    { id: "frost", label: "Frost Light" },
-    { id: "sunset", label: "Sunset Light" },
-    { id: "meadow", label: "Meadow Light" },
-    { id: "lagoon", label: "Lagoon Light" },
-    { id: "blush", label: "Blush Light" },
-    { id: "linen", label: "Linen Light" },
-    { id: "sakura", label: "Sakura Light" },
-    { id: "candy", label: "Candy Light" },
-    { id: "apricot", label: "Apricot Light" },
-    { id: "teal", label: "Teal Light" },
-    { id: "lilac", label: "Lilac Light" },
-    { id: "slate", label: "Slate Light" },
-    { id: "honey", label: "Honey Light" },
-    { id: "spruce", label: "Spruce Light" },
-    { id: "plum", label: "Plum Light" },
-    { id: "aqua", label: "Aqua Light" },
-    { id: "copper", label: "Copper Light" },
-  ],
+const FLUX_VARIANTS = [
+  "default",
+  "prism",
+  "nova",
+  "mercury",
+  "auric",
+  "opal",
+  "plasma",
+  "hologram",
+  "dusk",
+  "emberglass",
+  "icefire",
+  "ultra",
+  "vector",
+  "zen",
+  "byte",
+  "rift",
+  "vapor",
+  "arc",
+  "spectral",
+  "pulse",
+  "lumen",
+  "echo",
+  "afterglow",
+  "quartz",
+  "oxide",
+  "iridescent",
+  "cosmic",
+  "static",
+  "mirage",
+  "rune",
+  "circuit",
+  "dream",
+  "aether",
+  "zenithal",
+  "helix",
+  "wavelength",
+] as const;
+
+type ThemeMode = "dark" | "light" | "flux";
+type DarkVariant = (typeof DARK_VARIANTS)[number];
+type LightVariant = (typeof LIGHT_VARIANTS)[number];
+type FluxVariant = (typeof FLUX_VARIANTS)[number];
+type ThemeVariant = DarkVariant | LightVariant | FluxVariant;
+type ThemePresetMap = {
+  dark: DarkVariant;
+  light: LightVariant;
+  flux: FluxVariant;
 };
 
-function isDarkVariant(variant: ThemeVariant): boolean {
-  return DARK_VARIANTS.includes(variant);
+const STORAGE_MODE_KEY = "shadowlab-theme";
+const STORAGE_PRESETS_KEY = "shadowlab-theme-presets";
+const FLUX_HOLD_MS = 3000;
+
+function isThemeMode(value: string): value is ThemeMode {
+  return value === "dark" || value === "light" || value === "flux";
 }
 
-function isLightVariant(variant: ThemeVariant): boolean {
-  return LIGHT_VARIANTS.includes(variant);
+function isDarkVariant(value: string): value is DarkVariant {
+  return (DARK_VARIANTS as readonly string[]).includes(value);
 }
 
-function getSystemTheme(): ThemeMode {
+function isLightVariant(value: string): value is LightVariant {
+  return (LIGHT_VARIANTS as readonly string[]).includes(value);
+}
+
+function isFluxVariant(value: string): value is FluxVariant {
+  return (FLUX_VARIANTS as readonly string[]).includes(value);
+}
+
+function getSystemTheme(): "dark" | "light" {
   if (typeof window === "undefined") {
     return "dark";
   }
@@ -269,37 +171,68 @@ function parsePresetMap(raw: string | null): ThemePresetMap | null {
   }
 
   try {
-    const parsed = JSON.parse(raw) as Partial<ThemePresetMap>;
-    const dark = parsed.dark ?? "default";
-    const light = parsed.light ?? "default";
+    const parsed = JSON.parse(raw) as Partial<Record<ThemeMode, string>>;
     return {
-      dark: isDarkVariant(dark) ? dark : "default",
-      light: isLightVariant(light) ? light : "default",
+      dark: isDarkVariant(parsed.dark ?? "") ? parsed.dark : "default",
+      light: isLightVariant(parsed.light ?? "") ? parsed.light : "default",
+      flux: isFluxVariant(parsed.flux ?? "") ? parsed.flux : "default",
     };
   } catch {
     return null;
   }
 }
 
+function titleCase(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
+  dark: DARK_VARIANTS.map((id) => ({
+    id,
+    label: id === "default" ? "Core Dark" : `${titleCase(id)} Dark`,
+  })),
+  light: LIGHT_VARIANTS.map((id) => ({
+    id,
+    label: id === "default" ? "Core Light" : `${titleCase(id)} Light`,
+  })),
+  flux: FLUX_VARIANTS.map((id) => ({
+    id,
+    label: id === "default" ? "Core Flux" : `${titleCase(id)} Flux`,
+  })),
+};
+
 export default function ThemeToggle() {
   const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
   const [presetMap, setPresetMap] = useState<ThemePresetMap>({
     dark: "default",
     light: "default",
+    flux: "default",
   });
   const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isHoldingFlux, setIsHoldingFlux] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const fluxHoldTimeoutRef = useRef<number | null>(null);
+  const didTriggerFluxHoldRef = useRef(false);
+
+  const clearFluxHoldTimeout = () => {
+    if (fluxHoldTimeoutRef.current) {
+      window.clearTimeout(fluxHoldTimeoutRef.current);
+      fluxHoldTimeoutRef.current = null;
+    }
+  };
 
   useEffect(() => {
     const storedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
-    const initialMode =
-      storedMode === "dark" || storedMode === "light" ? storedMode : getSystemTheme();
+    const initialMode: ThemeMode = isThemeMode(storedMode ?? "")
+      ? storedMode
+      : getSystemTheme();
 
     const presets =
       parsePresetMap(window.localStorage.getItem(STORAGE_PRESETS_KEY)) ?? {
         dark: "default",
         light: "default",
+        flux: "default",
       };
 
     setThemeMode(initialMode);
@@ -311,7 +244,7 @@ export default function ThemeToggle() {
 
     const handleSystemThemeChange = (event: MediaQueryListEvent) => {
       const savedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
-      if (savedMode === "dark" || savedMode === "light") {
+      if (isThemeMode(savedMode ?? "")) {
         return;
       }
 
@@ -333,19 +266,38 @@ export default function ThemeToggle() {
     window.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
+      clearFluxHoldTimeout();
       mediaQuery.removeEventListener("change", handleSystemThemeChange);
       window.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
+  const setModeAndPersist = (mode: ThemeMode, variant: ThemeVariant) => {
+    setThemeMode(mode);
+    applyTheme(mode, variant);
+    window.localStorage.setItem(STORAGE_MODE_KEY, mode);
+  };
+
   const toggleThemeMode = () => {
-    const nextMode: ThemeMode = themeMode === "dark" ? "light" : "dark";
-    setThemeMode(nextMode);
-    applyTheme(nextMode, presetMap[nextMode]);
-    window.localStorage.setItem(STORAGE_MODE_KEY, nextMode);
+    if (didTriggerFluxHoldRef.current) {
+      didTriggerFluxHoldRef.current = false;
+      return;
+    }
+
+    const nextMode: ThemeMode =
+      themeMode === "dark" ? "light" : themeMode === "light" ? "dark" : "dark";
+    setModeAndPersist(nextMode, presetMap[nextMode]);
   };
 
   const setModePreset = (variant: ThemeVariant) => {
+    if (
+      (themeMode === "dark" && !isDarkVariant(variant)) ||
+      (themeMode === "light" && !isLightVariant(variant)) ||
+      (themeMode === "flux" && !isFluxVariant(variant))
+    ) {
+      return;
+    }
+
     const nextMap: ThemePresetMap = {
       ...presetMap,
       [themeMode]: variant,
@@ -356,25 +308,55 @@ export default function ThemeToggle() {
     window.localStorage.setItem(STORAGE_PRESETS_KEY, JSON.stringify(nextMap));
   };
 
+  const startFluxHold = () => {
+    clearFluxHoldTimeout();
+    didTriggerFluxHoldRef.current = false;
+    setIsHoldingFlux(true);
+
+    fluxHoldTimeoutRef.current = window.setTimeout(() => {
+      didTriggerFluxHoldRef.current = true;
+      setIsHoldingFlux(false);
+      setIsExpanded(false);
+      setModeAndPersist("flux", presetMap.flux);
+    }, FLUX_HOLD_MS);
+  };
+
+  const stopFluxHold = () => {
+    clearFluxHoldTimeout();
+    setIsHoldingFlux(false);
+  };
+
   const label = mounted
     ? themeMode === "dark"
       ? "Dark"
-      : "Light"
+      : themeMode === "light"
+        ? "Light"
+        : "Flux"
     : "Theme";
 
   const activeVariant = presetMap[themeMode];
+  const dotClass =
+    themeMode === "dark"
+      ? "is-dark"
+      : themeMode === "light"
+        ? "is-light"
+        : "is-flux";
 
   return (
     <div className="theme-toggle-wrap" ref={containerRef}>
       <div className="theme-toggle-combo">
         <button
           type="button"
-          className="theme-toggle"
+          className={`theme-toggle ${isHoldingFlux ? "is-holding" : ""}`}
           onClick={toggleThemeMode}
-          aria-label="Toggle dark and light mode"
-          title="Toggle dark and light mode"
+          onPointerDown={startFluxHold}
+          onPointerUp={stopFluxHold}
+          onPointerLeave={stopFluxHold}
+          onPointerCancel={stopFluxHold}
+          aria-label="Toggle dark and light mode. Hold for 3 seconds to enter flux mode."
+          title="Click: Dark/Light. Hold 3s: Flux"
         >
-          <span className={`theme-dot ${themeMode === "dark" ? "is-dark" : "is-light"}`} />
+          <span className={`theme-dot ${dotClass}`} />
           <span>{label}</span>
         </button>
 

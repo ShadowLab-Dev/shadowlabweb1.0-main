@@ -41,6 +41,20 @@ html[data-theme="dark"] {
   --shadow: 0 34px 80px rgba(0, 0, 0, 0.5);
 }
 
+html[data-theme="flux"] {
+  --bg: #0b0d18;
+  --bg-2: #1a1f34;
+  --surface: rgba(22, 27, 49, 0.74);
+  --surface-strong: rgba(30, 36, 62, 0.9);
+  --text: #eef1ff;
+  --muted: #a7afcd;
+  --accent: #83d3ff;
+  --accent-2: #8d7dff;
+  --line: rgba(136, 156, 214, 0.25);
+  --line-strong: rgba(136, 156, 214, 0.45);
+  --shadow: 0 34px 84px rgba(8, 11, 24, 0.66);
+}
+
 html[data-theme="dark"][data-theme-variant="neon"] {
   --bg: hsl(190 48% 5%);
   --bg-2: hsl(200 58% 14%);
@@ -1021,6 +1035,510 @@ html[data-theme="light"][data-theme-variant="copper"] {
   --shadow: 0 30px 72px hsl(28 34% 45% / 0.23);
 }
 
+html[data-theme="flux"][data-theme-variant="default"] {
+  --bg: hsl(226 18% 11%);
+  --bg-2: hsl(240 23% 21%);
+  --surface: hsl(234 20% 25% / 0.74);
+  --surface-strong: hsl(234 21% 30% / 0.9);
+  --text: hsl(26 62% 93%);
+  --muted: hsl(6 24% 70%);
+  --accent: hsl(250 82% 64%);
+  --accent-2: hsl(208 72% 54%);
+  --line: hsl(250 48% 63% / 0.27);
+  --line-strong: hsl(250 54% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(230 50% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="prism"] {
+  --bg: hsl(274 23% 12%);
+  --bg-2: hsl(288 29% 22%);
+  --surface: hsl(282 26% 26% / 0.74);
+  --surface-strong: hsl(282 27% 31% / 0.9);
+  --text: hsl(74 62% 93%);
+  --muted: hsl(54 24% 70%);
+  --accent: hsl(304 90% 64%);
+  --accent-2: hsl(256 80% 54%);
+  --line: hsl(304 56% 63% / 0.27);
+  --line-strong: hsl(304 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(278 64% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="nova"] {
+  --bg: hsl(198 26% 11%);
+  --bg-2: hsl(212 33% 21%);
+  --surface: hsl(206 29% 25% / 0.74);
+  --surface-strong: hsl(206 30% 30% / 0.9);
+  --text: hsl(358 62% 93%);
+  --muted: hsl(338 24% 70%);
+  --accent: hsl(216 92% 64%);
+  --accent-2: hsl(180 82% 54%);
+  --line: hsl(216 58% 63% / 0.27);
+  --line-strong: hsl(216 64% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(202 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="mercury"] {
+  --bg: hsl(212 10% 12%);
+  --bg-2: hsl(226 13% 22%);
+  --surface: hsl(220 11% 26% / 0.74);
+  --surface-strong: hsl(220 12% 31% / 0.9);
+  --text: hsl(12 62% 93%);
+  --muted: hsl(352 24% 70%);
+  --accent: hsl(226 56% 64%);
+  --accent-2: hsl(194 46% 54%);
+  --line: hsl(226 30% 63% / 0.27);
+  --line-strong: hsl(226 34% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(216 28% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="auric"] {
+  --bg: hsl(46 22% 12%);
+  --bg-2: hsl(60 29% 22%);
+  --surface: hsl(54 25% 26% / 0.74);
+  --surface-strong: hsl(54 26% 31% / 0.9);
+  --text: hsl(206 62% 93%);
+  --muted: hsl(186 24% 70%);
+  --accent: hsl(54 88% 64%);
+  --accent-2: hsl(28 78% 54%);
+  --line: hsl(54 54% 63% / 0.27);
+  --line-strong: hsl(54 60% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(50 62% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="opal"] {
+  --bg: hsl(312 17% 12%);
+  --bg-2: hsl(326 21% 22%);
+  --surface: hsl(320 18% 26% / 0.74);
+  --surface-strong: hsl(320 19% 31% / 0.9);
+  --text: hsl(112 62% 93%);
+  --muted: hsl(92 24% 70%);
+  --accent: hsl(340 74% 64%);
+  --accent-2: hsl(294 64% 54%);
+  --line: hsl(340 40% 63% / 0.27);
+  --line-strong: hsl(340 46% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(316 46% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="plasma"] {
+  --bg: hsl(328 27% 11%);
+  --bg-2: hsl(342 35% 21%);
+  --surface: hsl(336 30% 25% / 0.74);
+  --surface-strong: hsl(336 32% 30% / 0.9);
+  --text: hsl(128 62% 93%);
+  --muted: hsl(108 24% 70%);
+  --accent: hsl(358 94% 64%);
+  --accent-2: hsl(310 84% 54%);
+  --line: hsl(358 60% 63% / 0.27);
+  --line-strong: hsl(358 66% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(332 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="hologram"] {
+  --bg: hsl(286 25% 12%);
+  --bg-2: hsl(300 32% 22%);
+  --surface: hsl(294 28% 26% / 0.74);
+  --surface-strong: hsl(294 29% 31% / 0.9);
+  --text: hsl(86 62% 93%);
+  --muted: hsl(66 24% 70%);
+  --accent: hsl(310 92% 64%);
+  --accent-2: hsl(268 82% 54%);
+  --line: hsl(310 58% 63% / 0.27);
+  --line-strong: hsl(310 64% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(290 70% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="dusk"] {
+  --bg: hsl(236 12% 11%);
+  --bg-2: hsl(250 16% 21%);
+  --surface: hsl(244 14% 25% / 0.74);
+  --surface-strong: hsl(244 14% 30% / 0.9);
+  --text: hsl(36 62% 93%);
+  --muted: hsl(16 24% 70%);
+  --accent: hsl(254 64% 64%);
+  --accent-2: hsl(218 54% 54%);
+  --line: hsl(254 30% 63% / 0.27);
+  --line-strong: hsl(254 36% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(240 34% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="emberglass"] {
+  --bg: hsl(18 25% 12%);
+  --bg-2: hsl(32 32% 22%);
+  --surface: hsl(26 28% 26% / 0.74);
+  --surface-strong: hsl(26 29% 31% / 0.9);
+  --text: hsl(178 62% 93%);
+  --muted: hsl(158 24% 70%);
+  --accent: hsl(30 88% 64%);
+  --accent-2: hsl(0 78% 54%);
+  --line: hsl(30 54% 63% / 0.27);
+  --line-strong: hsl(30 60% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(22 70% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="icefire"] {
+  --bg: hsl(192 28% 11%);
+  --bg-2: hsl(206 36% 21%);
+  --surface: hsl(200 31% 25% / 0.74);
+  --surface-strong: hsl(200 33% 30% / 0.9);
+  --text: hsl(352 62% 93%);
+  --muted: hsl(332 24% 70%);
+  --accent: hsl(198 94% 64%);
+  --accent-2: hsl(174 84% 54%);
+  --line: hsl(198 60% 63% / 0.27);
+  --line-strong: hsl(198 66% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(196 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="ultra"] {
+  --bg: hsl(246 25% 10%);
+  --bg-2: hsl(260 32% 20%);
+  --surface: hsl(254 28% 24% / 0.74);
+  --surface-strong: hsl(254 29% 29% / 0.9);
+  --text: hsl(46 62% 93%);
+  --muted: hsl(26 24% 70%);
+  --accent: hsl(272 90% 64%);
+  --accent-2: hsl(228 80% 54%);
+  --line: hsl(272 56% 63% / 0.27);
+  --line-strong: hsl(272 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(250 70% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="vector"] {
+  --bg: hsl(162 22% 12%);
+  --bg-2: hsl(176 29% 22%);
+  --surface: hsl(170 25% 26% / 0.74);
+  --surface-strong: hsl(170 26% 31% / 0.9);
+  --text: hsl(322 62% 93%);
+  --muted: hsl(302 24% 70%);
+  --accent: hsl(174 84% 64%);
+  --accent-2: hsl(144 74% 54%);
+  --line: hsl(174 50% 63% / 0.27);
+  --line-strong: hsl(174 56% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(166 62% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="zen"] {
+  --bg: hsl(142 12% 13%);
+  --bg-2: hsl(156 16% 23%);
+  --surface: hsl(150 14% 27% / 0.74);
+  --surface-strong: hsl(150 14% 32% / 0.9);
+  --text: hsl(302 62% 93%);
+  --muted: hsl(282 24% 70%);
+  --accent: hsl(152 62% 64%);
+  --accent-2: hsl(124 52% 54%);
+  --line: hsl(152 30% 63% / 0.27);
+  --line-strong: hsl(152 34% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(146 34% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="byte"] {
+  --bg: hsl(204 22% 11%);
+  --bg-2: hsl(218 28% 21%);
+  --surface: hsl(212 24% 25% / 0.74);
+  --surface-strong: hsl(212 25% 30% / 0.9);
+  --text: hsl(4 62% 93%);
+  --muted: hsl(344 24% 70%);
+  --accent: hsl(218 84% 64%);
+  --accent-2: hsl(186 74% 54%);
+  --line: hsl(218 50% 63% / 0.27);
+  --line-strong: hsl(218 56% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(208 60% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="rift"] {
+  --bg: hsl(266 22% 10%);
+  --bg-2: hsl(280 29% 20%);
+  --surface: hsl(274 25% 24% / 0.74);
+  --surface-strong: hsl(274 26% 29% / 0.9);
+  --text: hsl(66 62% 93%);
+  --muted: hsl(46 24% 70%);
+  --accent: hsl(288 86% 64%);
+  --accent-2: hsl(248 76% 54%);
+  --line: hsl(288 52% 63% / 0.27);
+  --line-strong: hsl(288 58% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(270 62% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="vapor"] {
+  --bg: hsl(304 20% 12%);
+  --bg-2: hsl(318 26% 22%);
+  --surface: hsl(312 22% 26% / 0.74);
+  --surface-strong: hsl(312 24% 31% / 0.9);
+  --text: hsl(104 62% 93%);
+  --muted: hsl(84 24% 70%);
+  --accent: hsl(328 82% 64%);
+  --accent-2: hsl(286 72% 54%);
+  --line: hsl(328 48% 63% / 0.27);
+  --line-strong: hsl(328 54% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(308 56% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="arc"] {
+  --bg: hsl(218 26% 11%);
+  --bg-2: hsl(232 33% 21%);
+  --surface: hsl(226 29% 25% / 0.74);
+  --surface-strong: hsl(226 30% 30% / 0.9);
+  --text: hsl(18 62% 93%);
+  --muted: hsl(358 24% 70%);
+  --accent: hsl(238 90% 64%);
+  --accent-2: hsl(200 80% 54%);
+  --line: hsl(238 56% 63% / 0.27);
+  --line-strong: hsl(238 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(222 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="spectral"] {
+  --bg: hsl(338 26% 11%);
+  --bg-2: hsl(352 33% 21%);
+  --surface: hsl(346 29% 25% / 0.74);
+  --surface-strong: hsl(346 30% 30% / 0.9);
+  --text: hsl(138 62% 93%);
+  --muted: hsl(118 24% 70%);
+  --accent: hsl(6 90% 64%);
+  --accent-2: hsl(320 80% 54%);
+  --line: hsl(6 56% 63% / 0.27);
+  --line-strong: hsl(6 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(342 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="pulse"] {
+  --bg: hsl(176 27% 11%);
+  --bg-2: hsl(190 34% 21%);
+  --surface: hsl(184 30% 25% / 0.74);
+  --surface-strong: hsl(184 31% 30% / 0.9);
+  --text: hsl(336 62% 93%);
+  --muted: hsl(316 24% 70%);
+  --accent: hsl(188 92% 64%);
+  --accent-2: hsl(158 82% 54%);
+  --line: hsl(188 58% 63% / 0.27);
+  --line-strong: hsl(188 64% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(180 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="lumen"] {
+  --bg: hsl(58 24% 12%);
+  --bg-2: hsl(72 30% 22%);
+  --surface: hsl(66 26% 26% / 0.74);
+  --surface-strong: hsl(66 28% 31% / 0.9);
+  --text: hsl(218 62% 93%);
+  --muted: hsl(198 24% 70%);
+  --accent: hsl(66 90% 64%);
+  --accent-2: hsl(40 80% 54%);
+  --line: hsl(66 56% 63% / 0.27);
+  --line-strong: hsl(66 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(62 66% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="echo"] {
+  --bg: hsl(232 15% 11%);
+  --bg-2: hsl(246 19% 21%);
+  --surface: hsl(240 17% 25% / 0.74);
+  --surface-strong: hsl(240 18% 30% / 0.9);
+  --text: hsl(32 62% 93%);
+  --muted: hsl(12 24% 70%);
+  --accent: hsl(248 70% 64%);
+  --accent-2: hsl(214 60% 54%);
+  --line: hsl(248 36% 63% / 0.27);
+  --line-strong: hsl(248 42% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(236 42% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="afterglow"] {
+  --bg: hsl(22 24% 12%);
+  --bg-2: hsl(36 31% 22%);
+  --surface: hsl(30 27% 26% / 0.74);
+  --surface-strong: hsl(30 29% 31% / 0.9);
+  --text: hsl(182 62% 93%);
+  --muted: hsl(162 24% 70%);
+  --accent: hsl(34 86% 64%);
+  --accent-2: hsl(4 76% 54%);
+  --line: hsl(34 52% 63% / 0.27);
+  --line-strong: hsl(34 58% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(26 68% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="quartz"] {
+  --bg: hsl(256 13% 12%);
+  --bg-2: hsl(270 17% 22%);
+  --surface: hsl(264 14% 26% / 0.74);
+  --surface-strong: hsl(264 15% 31% / 0.9);
+  --text: hsl(56 62% 93%);
+  --muted: hsl(36 24% 70%);
+  --accent: hsl(276 70% 64%);
+  --accent-2: hsl(238 60% 54%);
+  --line: hsl(276 36% 63% / 0.27);
+  --line-strong: hsl(276 42% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(260 36% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="oxide"] {
+  --bg: hsl(12 19% 12%);
+  --bg-2: hsl(26 24% 22%);
+  --surface: hsl(20 21% 26% / 0.74);
+  --surface-strong: hsl(20 22% 31% / 0.9);
+  --text: hsl(172 62% 93%);
+  --muted: hsl(152 24% 70%);
+  --accent: hsl(22 74% 64%);
+  --accent-2: hsl(354 64% 54%);
+  --line: hsl(22 40% 63% / 0.27);
+  --line-strong: hsl(22 46% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(16 52% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="iridescent"] {
+  --bg: hsl(286 30% 11%);
+  --bg-2: hsl(300 38% 21%);
+  --surface: hsl(294 33% 25% / 0.74);
+  --surface-strong: hsl(294 34% 30% / 0.9);
+  --text: hsl(86 62% 93%);
+  --muted: hsl(66 24% 70%);
+  --accent: hsl(312 96% 64%);
+  --accent-2: hsl(268 86% 54%);
+  --line: hsl(312 62% 63% / 0.27);
+  --line-strong: hsl(312 68% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(290 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="cosmic"] {
+  --bg: hsl(248 24% 10%);
+  --bg-2: hsl(262 30% 20%);
+  --surface: hsl(256 26% 24% / 0.74);
+  --surface-strong: hsl(256 28% 29% / 0.9);
+  --text: hsl(48 62% 93%);
+  --muted: hsl(28 24% 70%);
+  --accent: hsl(272 90% 64%);
+  --accent-2: hsl(230 80% 54%);
+  --line: hsl(272 56% 63% / 0.27);
+  --line-strong: hsl(272 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(252 66% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="static"] {
+  --bg: hsl(214 7% 12%);
+  --bg-2: hsl(228 9% 22%);
+  --surface: hsl(222 8% 26% / 0.74);
+  --surface-strong: hsl(222 8% 31% / 0.9);
+  --text: hsl(14 62% 93%);
+  --muted: hsl(354 24% 70%);
+  --accent: hsl(226 54% 64%);
+  --accent-2: hsl(196 44% 54%);
+  --line: hsl(226 30% 63% / 0.27);
+  --line-strong: hsl(226 34% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(218 20% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="mirage"] {
+  --bg: hsl(188 24% 11%);
+  --bg-2: hsl(202 30% 21%);
+  --surface: hsl(196 26% 25% / 0.74);
+  --surface-strong: hsl(196 28% 30% / 0.9);
+  --text: hsl(348 62% 93%);
+  --muted: hsl(328 24% 70%);
+  --accent: hsl(198 86% 64%);
+  --accent-2: hsl(170 76% 54%);
+  --line: hsl(198 52% 63% / 0.27);
+  --line-strong: hsl(198 58% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(192 66% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="rune"] {
+  --bg: hsl(320 19% 11%);
+  --bg-2: hsl(334 25% 21%);
+  --surface: hsl(328 22% 25% / 0.74);
+  --surface-strong: hsl(328 23% 30% / 0.9);
+  --text: hsl(120 62% 93%);
+  --muted: hsl(100 24% 70%);
+  --accent: hsl(346 82% 64%);
+  --accent-2: hsl(302 72% 54%);
+  --line: hsl(346 48% 63% / 0.27);
+  --line-strong: hsl(346 54% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(324 54% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="circuit"] {
+  --bg: hsl(208 26% 11%);
+  --bg-2: hsl(222 33% 21%);
+  --surface: hsl(216 29% 25% / 0.74);
+  --surface-strong: hsl(216 30% 30% / 0.9);
+  --text: hsl(8 62% 93%);
+  --muted: hsl(348 24% 70%);
+  --accent: hsl(222 92% 64%);
+  --accent-2: hsl(190 82% 54%);
+  --line: hsl(222 58% 63% / 0.27);
+  --line-strong: hsl(222 64% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(212 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="dream"] {
+  --bg: hsl(296 23% 12%);
+  --bg-2: hsl(310 29% 22%);
+  --surface: hsl(304 26% 26% / 0.74);
+  --surface-strong: hsl(304 27% 31% / 0.9);
+  --text: hsl(96 62% 93%);
+  --muted: hsl(76 24% 70%);
+  --accent: hsl(320 84% 64%);
+  --accent-2: hsl(278 74% 54%);
+  --line: hsl(320 50% 63% / 0.27);
+  --line-strong: hsl(320 56% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(300 64% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="aether"] {
+  --bg: hsl(170 25% 11%);
+  --bg-2: hsl(184 32% 21%);
+  --surface: hsl(178 28% 25% / 0.74);
+  --surface-strong: hsl(178 29% 30% / 0.9);
+  --text: hsl(330 62% 93%);
+  --muted: hsl(310 24% 70%);
+  --accent: hsl(184 90% 64%);
+  --accent-2: hsl(152 80% 54%);
+  --line: hsl(184 56% 63% / 0.27);
+  --line-strong: hsl(184 62% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(174 70% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="zenithal"] {
+  --bg: hsl(224 27% 10%);
+  --bg-2: hsl(238 35% 20%);
+  --surface: hsl(232 30% 24% / 0.74);
+  --surface-strong: hsl(232 32% 29% / 0.9);
+  --text: hsl(24 62% 93%);
+  --muted: hsl(4 24% 70%);
+  --accent: hsl(244 94% 64%);
+  --accent-2: hsl(206 84% 54%);
+  --line: hsl(244 60% 63% / 0.27);
+  --line-strong: hsl(244 66% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(228 72% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="helix"] {
+  --bg: hsl(156 20% 12%);
+  --bg-2: hsl(170 26% 22%);
+  --surface: hsl(164 22% 26% / 0.74);
+  --surface-strong: hsl(164 24% 31% / 0.9);
+  --text: hsl(316 62% 93%);
+  --muted: hsl(296 24% 70%);
+  --accent: hsl(168 78% 64%);
+  --accent-2: hsl(138 68% 54%);
+  --line: hsl(168 44% 63% / 0.27);
+  --line-strong: hsl(168 50% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(160 56% 8% / 0.7);
+}
+
+html[data-theme="flux"][data-theme-variant="wavelength"] {
+  --bg: hsl(194 30% 11%);
+  --bg-2: hsl(208 39% 21%);
+  --surface: hsl(202 34% 25% / 0.74);
+  --surface-strong: hsl(202 35% 30% / 0.9);
+  --text: hsl(354 62% 93%);
+  --muted: hsl(334 24% 70%);
+  --accent: hsl(202 96% 64%);
+  --accent-2: hsl(176 86% 54%);
+  --line: hsl(202 62% 63% / 0.27);
+  --line-strong: hsl(202 68% 66% / 0.47);
+  --shadow: 0 34px 84px hsl(198 72% 8% / 0.7);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -1125,6 +1643,11 @@ a {
   background: rgba(127, 153, 226, 0.1);
 }
 
+.theme-toggle.is-holding {
+  background: rgba(127, 153, 226, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(137, 184, 255, 0.34);
+}
+
 .theme-toggle span {
   font-size: 0.76rem;
   font-weight: 700;
@@ -1147,6 +1670,11 @@ a {
 .theme-dot.is-light {
   background: linear-gradient(150deg, #ffd95f, #ff8c42);
   box-shadow: 0 0 0 3px rgba(255, 196, 87, 0.26);
+}
+
+.theme-dot.is-flux {
+  background: linear-gradient(150deg, #88dcff, #9a79ff);
+  box-shadow: 0 0 0 3px rgba(143, 165, 255, 0.27);
 }
 
 .theme-expand {
