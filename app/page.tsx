@@ -37,11 +37,66 @@ const gatewayBoxes = [
 ];
 
 const HUNT_CELLS = 12;
+const COIN_SIDES = ["heads", "tails"] as const;
+const SLOT_SYMBOLS = ["7", "BAR", "STAR", "BELL", "WILD", "LUCK"] as const;
+const SWATCHES = [
+  { name: "Cyan", value: "#26d9ff" },
+  { name: "Sky", value: "#5fa2ff" },
+  { name: "Mint", value: "#6bf0c7" },
+  { name: "Amber", value: "#ffc772" },
+  { name: "Rose", value: "#ff9292" },
+  { name: "Violet", value: "#b7a0ff" },
+];
 
 type ReactionPhase = "idle" | "waiting" | "ready" | "result" | "tooSoon";
+type CoinSide = (typeof COIN_SIDES)[number];
+type MathPrompt = {
+  left: number;
+  right: number;
+  operator: "+" | "-";
+  answer: number;
+};
 
 function randomBetween(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function createMathPrompt(): MathPrompt {
+  const operator = Math.random() < 0.5 ? "+" : "-";
+  const left = randomBetween(4, 24);
+  const right = randomBetween(2, 15);
+
+  if (operator === "-") {
+    const high = Math.max(left, right);
+    const low = Math.min(left, right);
+    return { left: high, right: low, operator, answer: high - low };
+  }
+
+  return { left, right, operator, answer: left + right };
+}
+
+function createMemoryCode(length: number) {
+  return Array.from({ length }, () => randomBetween(0, 9)).join("");
+}
+
+function pickSwatchTarget() {
+  return SWATCHES[randomBetween(0, SWATCHES.length - 1)].name;
+}
+
+function formatCardValue(value: number) {
+  if (value === 1) {
+    return "A";
+  }
+  if (value === 11) {
+    return "J";
+  }
+  if (value === 12) {
+    return "Q";
+  }
+  if (value === 13) {
+    return "K";
+  }
+  return String(value);
 }
 
 export default function Home() {
@@ -66,6 +121,45 @@ export default function Home() {
     randomBetween(0, HUNT_CELLS - 1),
   );
   const huntScoreRef = useRef(0);
+
+  const [coinResult, setCoinResult] = useState("Call heads or tails to start.");
+  const [coinWins, setCoinWins] = useState(0);
+  const [coinLosses, setCoinLosses] = useState(0);
+  const [coinStreak, setCoinStreak] = useState(0);
+  const [coinBestStreak, setCoinBestStreak] = useState(0);
+
+  const [mathPrompt, setMathPrompt] = useState<MathPrompt>(() => createMathPrompt());
+  const [mathInput, setMathInput] = useState("");
+  const [mathScore, setMathScore] = useState(0);
+  const [mathRounds, setMathRounds] = useState(0);
+  const [mathMessage, setMathMessage] = useState("Solve the equation and submit your answer.");
+
+  const memoryTimeoutRef = useRef<number | null>(null);
+  const [memorySequence, setMemorySequence] = useState("");
+  const [memoryVisible, setMemoryVisible] = useState(false);
+  const [memoryInput, setMemoryInput] = useState("");
+  const [memoryRound, setMemoryRound] = useState(1);
+  const [memoryScore, setMemoryScore] = useState(0);
+  const [memoryAttempts, setMemoryAttempts] = useState(0);
+  const [memoryMessage, setMemoryMessage] = useState("Reveal a code, memorize it, then type it.");
+
+  const [slotReels, setSlotReels] = useState<string[]>(["7", "BAR", "7"]);
+  const [slotSpins, setSlotSpins] = useState(0);
+  const [slotJackpots, setSlotJackpots] = useState(0);
+  const [slotMessage, setSlotMessage] = useState("Spin the reels and line up a triple.");
+
+  const [targetSwatch, setTargetSwatch] = useState(() => pickSwatchTarget());
+  const [swatchTries, setSwatchTries] = useState(0);
+  const [swatchHits, setSwatchHits] = useState(0);
+  const [swatchMessage, setSwatchMessage] = useState("Pick the color that matches the target.");
+
+  const [highLowCurrent, setHighLowCurrent] = useState(() => randomBetween(1, 13));
+  const [highLowScore, setHighLowScore] = useState(0);
+  const [highLowBest, setHighLowBest] = useState(0);
+  const [highLowLives, setHighLowLives] = useState(3);
+  const [highLowMessage, setHighLowMessage] = useState(
+    "Guess whether the next card value goes higher or lower.",
+  );
 
   useEffect(() => {
     const revealElements = document.querySelectorAll<HTMLElement>("[data-reveal]");
@@ -99,6 +193,9 @@ export default function Home() {
     return () => {
       if (reactionTimeoutRef.current) {
         window.clearTimeout(reactionTimeoutRef.current);
+      }
+      if (memoryTimeoutRef.current) {
+        window.clearTimeout(memoryTimeoutRef.current);
       }
     };
   }, []);
@@ -239,6 +336,223 @@ export default function Home() {
     });
   };
 
+  const playCoinRound = (call: CoinSide) => {
+    const flipped = COIN_SIDES[randomBetween(0, COIN_SIDES.length - 1)];
+
+    if (flipped === call) {
+      setCoinWins((current) => current + 1);
+      setCoinStreak((current) => {
+        const next = current + 1;
+        setCoinBestStreak((best) => Math.max(best, next));
+        return next;
+      });
+      setCoinResult(`Flip: ${flipped}. Exact call.`);
+      return;
+    }
+
+    setCoinLosses((current) => current + 1);
+    setCoinStreak(0);
+    setCoinResult(`Flip: ${flipped}. Missed that one.`);
+  };
+
+  const resetCoinGame = () => {
+    setCoinResult("Call heads or tails to start.");
+    setCoinWins(0);
+    setCoinLosses(0);
+    setCoinStreak(0);
+    setCoinBestStreak(0);
+  };
+
+  const submitMathAnswer = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const value = Number.parseInt(mathInput, 10);
+    if (Number.isNaN(value)) {
+      setMathMessage("Enter a valid number first.");
+      return;
+    }
+
+    setMathRounds((current) => current + 1);
+
+    if (value === mathPrompt.answer) {
+      setMathScore((current) => current + 1);
+      setMathMessage("Correct. Next equation loaded.");
+    } else {
+      setMathMessage(`Not quite. Answer was ${mathPrompt.answer}.`);
+    }
+
+    setMathInput("");
+    setMathPrompt(createMathPrompt());
+  };
+
+  const resetMathGame = () => {
+    setMathPrompt(createMathPrompt());
+    setMathInput("");
+    setMathScore(0);
+    setMathRounds(0);
+    setMathMessage("Solve the equation and submit your answer.");
+  };
+
+  const revealMemoryCode = () => {
+    if (memoryTimeoutRef.current) {
+      window.clearTimeout(memoryTimeoutRef.current);
+    }
+
+    const length = Math.min(7, 2 + memoryRound);
+    const nextCode = createMemoryCode(length);
+    setMemorySequence(nextCode);
+    setMemoryVisible(true);
+    setMemoryInput("");
+    setMemoryMessage("Memorize the code before it fades.");
+
+    memoryTimeoutRef.current = window.setTimeout(() => {
+      setMemoryVisible(false);
+      memoryTimeoutRef.current = null;
+    }, 1500 + length * 150);
+  };
+
+  const submitMemoryGuess = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!memorySequence) {
+      setMemoryMessage("Reveal a code first.");
+      return;
+    }
+
+    if (memoryVisible) {
+      setMemoryMessage("Wait for the code to hide, then submit.");
+      return;
+    }
+
+    const cleanedGuess = memoryInput.replace(/\s+/g, "");
+    const correct = cleanedGuess === memorySequence;
+    setMemoryAttempts((current) => current + 1);
+    setMemoryRound((current) => current + 1);
+
+    if (correct) {
+      setMemoryScore((current) => current + 1);
+      setMemoryMessage("Perfect recall. Reveal the next one.");
+    } else {
+      setMemoryMessage(`Missed. The code was ${memorySequence}.`);
+    }
+
+    setMemoryInput("");
+  };
+
+  const resetMemoryGame = () => {
+    if (memoryTimeoutRef.current) {
+      window.clearTimeout(memoryTimeoutRef.current);
+      memoryTimeoutRef.current = null;
+    }
+    setMemorySequence("");
+    setMemoryVisible(false);
+    setMemoryInput("");
+    setMemoryRound(1);
+    setMemoryScore(0);
+    setMemoryAttempts(0);
+    setMemoryMessage("Reveal a code, memorize it, then type it.");
+  };
+
+  const spinSlots = () => {
+    const nextReels = Array.from(
+      { length: 3 },
+      () => SLOT_SYMBOLS[randomBetween(0, SLOT_SYMBOLS.length - 1)],
+    );
+
+    setSlotReels(nextReels);
+    setSlotSpins((current) => current + 1);
+
+    const uniqueCount = new Set(nextReels).size;
+    if (uniqueCount === 1) {
+      setSlotJackpots((current) => current + 1);
+      setSlotMessage(`Jackpot: ${nextReels.join(" | ")}`);
+      return;
+    }
+
+    if (uniqueCount === 2) {
+      setSlotMessage(`Pair landed: ${nextReels.join(" | ")}`);
+      return;
+    }
+
+    setSlotMessage(`No match: ${nextReels.join(" | ")}`);
+  };
+
+  const resetSlotGame = () => {
+    setSlotReels(["7", "BAR", "7"]);
+    setSlotSpins(0);
+    setSlotJackpots(0);
+    setSlotMessage("Spin the reels and line up a triple.");
+  };
+
+  const pickSwatch = (name: string) => {
+    setSwatchTries((current) => current + 1);
+
+    if (name === targetSwatch) {
+      setSwatchHits((current) => current + 1);
+      setSwatchMessage(`Hit confirmed on ${name}. New target set.`);
+      setTargetSwatch(pickSwatchTarget());
+      return;
+    }
+
+    setSwatchMessage(`${name} was close. Try again.`);
+  };
+
+  const resetSwatchGame = () => {
+    setTargetSwatch(pickSwatchTarget());
+    setSwatchTries(0);
+    setSwatchHits(0);
+    setSwatchMessage("Pick the color that matches the target.");
+  };
+
+  const guessHighLow = (direction: "higher" | "lower") => {
+    const nextValue = randomBetween(1, 13);
+
+    if (nextValue === highLowCurrent) {
+      setHighLowCurrent(nextValue);
+      setHighLowMessage(`Tie at ${formatCardValue(nextValue)}. No score change.`);
+      return;
+    }
+
+    const correctGuess =
+      direction === "higher" ? nextValue > highLowCurrent : nextValue < highLowCurrent;
+
+    if (correctGuess) {
+      setHighLowScore((current) => {
+        const next = current + 1;
+        setHighLowBest((best) => Math.max(best, next));
+        return next;
+      });
+      setHighLowCurrent(nextValue);
+      setHighLowMessage(`Next card ${formatCardValue(nextValue)}. Correct call.`);
+      return;
+    }
+
+    const remainingLives = highLowLives - 1;
+    if (remainingLives <= 0) {
+      setHighLowBest((best) => Math.max(best, highLowScore));
+      setHighLowScore(0);
+      setHighLowLives(3);
+      setHighLowCurrent(randomBetween(1, 13));
+      setHighLowMessage(
+        `Next card ${formatCardValue(nextValue)}. Run ended, new round started.`,
+      );
+      return;
+    }
+
+    setHighLowLives(remainingLives);
+    setHighLowCurrent(nextValue);
+    setHighLowMessage(
+      `Next card ${formatCardValue(nextValue)}. Missed, ${remainingLives} lives left.`,
+    );
+  };
+
+  const resetHighLowGame = () => {
+    setHighLowCurrent(randomBetween(1, 13));
+    setHighLowScore(0);
+    setHighLowLives(3);
+    setHighLowMessage("Guess whether the next card value goes higher or lower.");
+  };
+
   const reactionLabel =
     reactionPhase === "idle"
       ? "Start the test"
@@ -369,6 +683,163 @@ export default function Home() {
                 />
               ))}
             </div>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>Coin Clash</h3>
+            <p>Call heads or tails and build your best streak.</p>
+            <div className="choice-grid">
+              {COIN_SIDES.map((side) => (
+                <button
+                  key={side}
+                  type="button"
+                  className="game-ghost"
+                  onClick={() => playCoinRound(side)}
+                >
+                  {side === "heads" ? "Heads" : "Tails"}
+                </button>
+              ))}
+            </div>
+            <p className="game-status">{coinResult}</p>
+            <p className="game-meta">
+              Wins: {coinWins} | Losses: {coinLosses} | Streak: {coinStreak} | Best: {coinBestStreak}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetCoinGame}>
+              Reset Clash
+            </button>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>Math Sprint</h3>
+            <p>Solve each equation quickly to raise your score.</p>
+            <p className="game-meta">
+              Equation: {mathPrompt.left} {mathPrompt.operator} {mathPrompt.right}
+            </p>
+            <form className="code-form" onSubmit={submitMathAnswer}>
+              <input
+                type="number"
+                value={mathInput}
+                onChange={(event) => setMathInput(event.target.value)}
+                placeholder="Enter answer"
+                aria-label="Math answer"
+              />
+              <button type="submit" className="game-button">
+                Submit Answer
+              </button>
+            </form>
+            <p className="game-status">{mathMessage}</p>
+            <p className="game-meta">
+              Score: {mathScore} / Rounds: {mathRounds}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetMathGame}>
+              Reset Sprint
+            </button>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>Memory Flash</h3>
+            <p>Memorize the code before it disappears.</p>
+            <button type="button" className="game-button" onClick={revealMemoryCode}>
+              Reveal Code
+            </button>
+            <div className={`game-display ${memoryVisible ? "is-visible" : ""}`}>
+              {memoryVisible
+                ? memorySequence
+                : memorySequence
+                  ? "Code hidden"
+                  : "Press Reveal Code"}
+            </div>
+            <form className="code-form" onSubmit={submitMemoryGuess}>
+              <input
+                type="text"
+                value={memoryInput}
+                onChange={(event) => setMemoryInput(event.target.value)}
+                placeholder="Type code"
+                aria-label="Memory code guess"
+              />
+              <button type="submit" className="game-button">
+                Check Recall
+              </button>
+            </form>
+            <p className="game-status">{memoryMessage}</p>
+            <p className="game-meta">
+              Score: {memoryScore} / Attempts: {memoryAttempts} / Round: {memoryRound}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetMemoryGame}>
+              Reset Flash
+            </button>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>Lucky Slots</h3>
+            <p>Spin three reels and aim for a full match.</p>
+            <div className="slot-reels" role="group" aria-label="Slot reels">
+              {slotReels.map((symbol, index) => (
+                <span key={`${symbol}-${index}`} className="slot-reel">
+                  {symbol}
+                </span>
+              ))}
+            </div>
+            <button type="button" className="game-button" onClick={spinSlots}>
+              Spin Reels
+            </button>
+            <p className="game-status">{slotMessage}</p>
+            <p className="game-meta">
+              Spins: {slotSpins} | Jackpots: {slotJackpots}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetSlotGame}>
+              Reset Slots
+            </button>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>Spectrum Match</h3>
+            <p>Hit the target color in as few tries as possible.</p>
+            <p className="game-meta">Target: {targetSwatch}</p>
+            <div className="swatch-grid" role="group" aria-label="Color choices">
+              {SWATCHES.map((swatch) => (
+                <button
+                  key={swatch.name}
+                  type="button"
+                  className="swatch-button"
+                  style={{ backgroundColor: swatch.value }}
+                  onClick={() => pickSwatch(swatch.name)}
+                  aria-label={`Pick ${swatch.name}`}
+                >
+                  {swatch.name}
+                </button>
+              ))}
+            </div>
+            <p className="game-status">{swatchMessage}</p>
+            <p className="game-meta">
+              Hits: {swatchHits} | Tries: {swatchTries}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetSwatchGame}>
+              Reset Match
+            </button>
+          </article>
+
+          <article className="game-card reveal" data-reveal>
+            <h3>High-Low Relay</h3>
+            <p>Predict if the next card goes higher or lower.</p>
+            <div className="game-display is-visible">
+              Current card: {formatCardValue(highLowCurrent)}
+            </div>
+            <div className="choice-grid">
+              <button type="button" className="game-button" onClick={() => guessHighLow("higher")}>
+                Higher
+              </button>
+              <button type="button" className="game-button" onClick={() => guessHighLow("lower")}>
+                Lower
+              </button>
+            </div>
+            <p className="game-status">{highLowMessage}</p>
+            <p className="game-meta">
+              Score: {highLowScore} | Lives: {highLowLives} | Best: {highLowBest}
+            </p>
+            <button type="button" className="game-ghost" onClick={resetHighLowGame}>
+              Reset Relay
+            </button>
           </article>
         </div>
       </section>
