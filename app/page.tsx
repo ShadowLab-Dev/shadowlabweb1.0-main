@@ -161,6 +161,8 @@ export default function Home() {
     "Guess whether the next card value goes higher or lower.",
   );
 
+  const [gamesRevealed, setGamesRevealed] = useState(false);
+
   useEffect(() => {
     const revealElements = document.querySelectorAll<HTMLElement>("[data-reveal]");
     const prefersReducedMotion = window.matchMedia(
@@ -619,7 +621,28 @@ export default function Home() {
           <h2>Built-in games</h2>
         </div>
 
-        <div className="games-grid">
+        <div className="games-toggle-wrap">
+          <button
+            type="button"
+            className={`reveal-games-button ${gamesRevealed ? "is-open" : ""}`}
+            onClick={() => setGamesRevealed(true)}
+            aria-expanded={gamesRevealed}
+            aria-controls="games-grid-panel"
+            disabled={gamesRevealed}
+          >
+            <span>{gamesRevealed ? "Games Revealed" : "Reveal Web Games"}</span>
+            <small>
+              {gamesRevealed ? "Arcade unlocked. All games are live." : "Tap to reveal all 9 games."}
+            </small>
+          </button>
+        </div>
+
+        <div
+          id="games-grid-panel"
+          className={`games-reveal-wrap ${gamesRevealed ? "is-open" : ""}`}
+          aria-hidden={!gamesRevealed}
+        >
+          <div className="games-grid">
           <article className="game-card reveal" data-reveal>
             <h3>Reflex Pulse</h3>
             <p>Measure your reaction speed against the signal flash.</p>
@@ -841,6 +864,7 @@ export default function Home() {
               Reset Relay
             </button>
           </article>
+          </div>
         </div>
       </section>
 
