@@ -38,7 +38,43 @@ type ThemeVariant =
   | "orchid"
   | "forest"
   | "cherry"
-  | "ivory";
+  | "ivory"
+  | "obsidian"
+  | "phantom"
+  | "aurora"
+  | "voltage"
+  | "magma"
+  | "ion"
+  | "onyx"
+  | "cyber"
+  | "twilight"
+  | "synthwave"
+  | "deepsea"
+  | "toxic"
+  | "zenith"
+  | "embercore"
+  | "nightfall"
+  | "quantum"
+  | "arcane"
+  | "monsoon"
+  | "cloud"
+  | "frost"
+  | "sunset"
+  | "meadow"
+  | "lagoon"
+  | "blush"
+  | "linen"
+  | "sakura"
+  | "candy"
+  | "apricot"
+  | "teal"
+  | "lilac"
+  | "slate"
+  | "honey"
+  | "spruce"
+  | "plum"
+  | "aqua"
+  | "copper";
 type ThemePresetMap = {
   dark: ThemeVariant;
   light: ThemeVariant;
@@ -66,6 +102,24 @@ const DARK_VARIANTS: ThemeVariant[] = [
   "carbon",
   "crimson",
   "arctic",
+  "obsidian",
+  "phantom",
+  "aurora",
+  "voltage",
+  "magma",
+  "ion",
+  "onyx",
+  "cyber",
+  "twilight",
+  "synthwave",
+  "deepsea",
+  "toxic",
+  "zenith",
+  "embercore",
+  "nightfall",
+  "quantum",
+  "arcane",
+  "monsoon",
 ];
 
 const LIGHT_VARIANTS: ThemeVariant[] = [
@@ -87,6 +141,24 @@ const LIGHT_VARIANTS: ThemeVariant[] = [
   "forest",
   "cherry",
   "ivory",
+  "cloud",
+  "frost",
+  "sunset",
+  "meadow",
+  "lagoon",
+  "blush",
+  "linen",
+  "sakura",
+  "candy",
+  "apricot",
+  "teal",
+  "lilac",
+  "slate",
+  "honey",
+  "spruce",
+  "plum",
+  "aqua",
+  "copper",
 ];
 
 const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
@@ -109,6 +181,24 @@ const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>
     { id: "carbon", label: "Carbon Dark" },
     { id: "crimson", label: "Crimson Dark" },
     { id: "arctic", label: "Arctic Dark" },
+    { id: "obsidian", label: "Obsidian Dark" },
+    { id: "phantom", label: "Phantom Dark" },
+    { id: "aurora", label: "Aurora Dark" },
+    { id: "voltage", label: "Voltage Dark" },
+    { id: "magma", label: "Magma Dark" },
+    { id: "ion", label: "Ion Dark" },
+    { id: "onyx", label: "Onyx Dark" },
+    { id: "cyber", label: "Cyber Dark" },
+    { id: "twilight", label: "Twilight Dark" },
+    { id: "synthwave", label: "Synthwave Dark" },
+    { id: "deepsea", label: "Deepsea Dark" },
+    { id: "toxic", label: "Toxic Dark" },
+    { id: "zenith", label: "Zenith Dark" },
+    { id: "embercore", label: "Embercore Dark" },
+    { id: "nightfall", label: "Nightfall Dark" },
+    { id: "quantum", label: "Quantum Dark" },
+    { id: "arcane", label: "Arcane Dark" },
+    { id: "monsoon", label: "Monsoon Dark" },
   ],
   light: [
     { id: "default", label: "Core Light" },
@@ -129,6 +219,24 @@ const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>
     { id: "forest", label: "Forest Light" },
     { id: "cherry", label: "Cherry Light" },
     { id: "ivory", label: "Ivory Light" },
+    { id: "cloud", label: "Cloud Light" },
+    { id: "frost", label: "Frost Light" },
+    { id: "sunset", label: "Sunset Light" },
+    { id: "meadow", label: "Meadow Light" },
+    { id: "lagoon", label: "Lagoon Light" },
+    { id: "blush", label: "Blush Light" },
+    { id: "linen", label: "Linen Light" },
+    { id: "sakura", label: "Sakura Light" },
+    { id: "candy", label: "Candy Light" },
+    { id: "apricot", label: "Apricot Light" },
+    { id: "teal", label: "Teal Light" },
+    { id: "lilac", label: "Lilac Light" },
+    { id: "slate", label: "Slate Light" },
+    { id: "honey", label: "Honey Light" },
+    { id: "spruce", label: "Spruce Light" },
+    { id: "plum", label: "Plum Light" },
+    { id: "aqua", label: "Aqua Light" },
+    { id: "copper", label: "Copper Light" },
   ],
 };
 
