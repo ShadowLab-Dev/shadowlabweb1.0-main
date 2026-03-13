@@ -172,10 +172,14 @@ function parsePresetMap(raw: string | null): ThemePresetMap | null {
 
   try {
     const parsed = JSON.parse(raw) as Partial<Record<ThemeMode, string>>;
+    const darkCandidate = parsed.dark ?? "";
+    const lightCandidate = parsed.light ?? "";
+    const fluxCandidate = parsed.flux ?? "";
+
     return {
-      dark: isDarkVariant(parsed.dark ?? "") ? parsed.dark : "default",
-      light: isLightVariant(parsed.light ?? "") ? parsed.light : "default",
-      flux: isFluxVariant(parsed.flux ?? "") ? parsed.flux : "default",
+      dark: isDarkVariant(darkCandidate) ? darkCandidate : "default",
+      light: isLightVariant(lightCandidate) ? lightCandidate : "default",
+      flux: isFluxVariant(fluxCandidate) ? fluxCandidate : "default",
     };
   } catch {
     return null;
