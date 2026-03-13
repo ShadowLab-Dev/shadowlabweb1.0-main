@@ -1,12 +1,31 @@
-﻿"use client";
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-type Theme = "dark" | "light";
+type ThemeMode = "dark" | "light";
+type ThemeVariant = "default" | "neon" | "ember" | "glacier" | "dawn";
+type ThemePresetMap = {
+  dark: ThemeVariant;
+  light: ThemeVariant;
+};
 
-const STORAGE_KEY = "shadowlab-theme";
+const STORAGE_MODE_KEY = "shadowlab-theme";
+const STORAGE_PRESETS_KEY = "shadowlab-theme-presets";
 
-function getSystemTheme(): Theme {
+const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
+  dark: [
+    { id: "default", label: "Core Dark" },
+    { id: "neon", label: "Neon Dark" },
+    { id: "ember", label: "Ember Dark" },
+  ],
+  light: [
+    { id: "default", label: "Core Light" },
+    { id: "glacier", label: "Glacier Light" },
+    { id: "dawn", label: "Dawn Light" },
+  ],
+};
+
+function getSystemTheme(): ThemeMode {
   if (typeof window === "undefined") {
     return "dark";
   }
@@ -16,66 +35,150 @@ function getSystemTheme(): Theme {
     : "light";
 }
 
-function applyTheme(theme: Theme) {
-  document.documentElement.setAttribute("data-theme", theme);
+function applyTheme(mode: ThemeMode, variant: ThemeVariant) {
+  document.documentElement.setAttribute("data-theme", mode);
+  document.documentElement.setAttribute("data-theme-variant", variant);
+}
+
+function parsePresetMap(raw: string | null): ThemePresetMap | null {
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<ThemePresetMap>;
+    const dark = parsed.dark ?? "default";
+    const light = parsed.light ?? "default";
+    return {
+      dark: dark === "default" || dark === "neon" || dark === "ember" ? dark : "default",
+      light: light === "default" || light === "glacier" || light === "dawn" ? light : "default",
+    };
+  } catch {
+    return null;
+  }
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [themeMode, setThemeMode] = useState<ThemeMode>("dark");
+  const [presetMap, setPresetMap] = useState<ThemePresetMap>({
+    dark: "default",
+    light: "default",
+  });
+  const [isExpanded, setIsExpanded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    const initialTheme =
-      stored === "dark" || stored === "light" ? stored : getSystemTheme();
+    const storedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
+    const initialMode =
+      storedMode === "dark" || storedMode === "light" ? storedMode : getSystemTheme();
 
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
+    const presets =
+      parsePresetMap(window.localStorage.getItem(STORAGE_PRESETS_KEY)) ?? {
+        dark: "default",
+        light: "default",
+      };
+
+    setThemeMode(initialMode);
+    setPresetMap(presets);
+    applyTheme(initialMode, presets[initialMode]);
     setMounted(true);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const handleSystemThemeChange = (event: MediaQueryListEvent) => {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === "dark" || saved === "light") {
+      const savedMode = window.localStorage.getItem(STORAGE_MODE_KEY);
+      if (savedMode === "dark" || savedMode === "light") {
         return;
       }
 
-      const systemTheme: Theme = event.matches ? "dark" : "light";
-      setTheme(systemTheme);
-      applyTheme(systemTheme);
+      const mode: ThemeMode = event.matches ? "dark" : "light";
+      setThemeMode(mode);
+      applyTheme(mode, presets[mode]);
+    };
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!containerRef.current) {
+        return;
+      }
+      if (!containerRef.current.contains(event.target as Node)) {
+        setIsExpanded(false);
+      }
     };
 
     mediaQuery.addEventListener("change", handleSystemThemeChange);
+    window.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
       mediaQuery.removeEventListener("change", handleSystemThemeChange);
+      window.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
-  const toggleTheme = () => {
-    const nextTheme: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
-    window.localStorage.setItem(STORAGE_KEY, nextTheme);
+  const toggleThemeMode = () => {
+    const nextMode: ThemeMode = themeMode === "dark" ? "light" : "dark";
+    setThemeMode(nextMode);
+    applyTheme(nextMode, presetMap[nextMode]);
+    window.localStorage.setItem(STORAGE_MODE_KEY, nextMode);
+  };
+
+  const setModePreset = (variant: ThemeVariant) => {
+    const nextMap: ThemePresetMap = {
+      ...presetMap,
+      [themeMode]: variant,
+    };
+
+    setPresetMap(nextMap);
+    applyTheme(themeMode, variant);
+    window.localStorage.setItem(STORAGE_PRESETS_KEY, JSON.stringify(nextMap));
   };
 
   const label = mounted
-    ? theme === "dark"
+    ? themeMode === "dark"
       ? "Dark"
       : "Light"
     : "Theme";
 
+  const activeVariant = presetMap[themeMode];
+
   return (
-    <button
-      type="button"
-      className="theme-toggle"
-      onClick={toggleTheme}
-      aria-label="Toggle dark and light mode"
-      title="Toggle theme"
-    >
-      <span className={`theme-dot ${theme === "dark" ? "is-dark" : "is-light"}`} />
-      <span>{label}</span>
-    </button>
+    <div className="theme-toggle-wrap" ref={containerRef}>
+      <button
+        type="button"
+        className="theme-toggle"
+        onClick={toggleThemeMode}
+        aria-label="Toggle dark and light mode"
+        title="Toggle dark and light mode"
+      >
+        <span className={`theme-dot ${themeMode === "dark" ? "is-dark" : "is-light"}`} />
+        <span>{label}</span>
+      </button>
+
+      <button
+        type="button"
+        className={`theme-expand ${isExpanded ? "is-open" : ""}`}
+        onClick={() => setIsExpanded((current) => !current)}
+        aria-label="Expand theme presets"
+        aria-expanded={isExpanded}
+      >
+        &gt;
+      </button>
+
+      {isExpanded ? (
+        <div className="theme-presets" role="menu" aria-label={`${themeMode} mode presets`}>
+          {modeVariants[themeMode].map((variant) => (
+            <button
+              key={`${themeMode}-${variant.id}`}
+              type="button"
+              className={`theme-preset ${activeVariant === variant.id ? "is-active" : ""}`}
+              onClick={() => setModePreset(variant.id)}
+              role="menuitem"
+            >
+              {variant.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

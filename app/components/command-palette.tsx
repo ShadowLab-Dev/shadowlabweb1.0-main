@@ -50,6 +50,7 @@ const sectorEntries: SectorEntry[] = [
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [isLauncherHidden, setIsLauncherHidden] = useState(false);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -84,6 +85,17 @@ export default function CommandPalette() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    const onScroll = () => {
+      setIsLauncherHidden(window.scrollY > 72);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const normalizedQuery = query.trim().toLowerCase();
   const filteredEntries = normalizedQuery
     ? sectorEntries.filter((entry) =>
@@ -97,7 +109,7 @@ export default function CommandPalette() {
     <>
       <button
         type="button"
-        className="command-launcher"
+        className={`command-launcher ${isLauncherHidden && !isOpen ? "is-hidden" : ""}`}
         onClick={() => setIsOpen(true)}
         aria-label="Open command palette"
       >

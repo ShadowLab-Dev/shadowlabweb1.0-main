@@ -12,6 +12,11 @@
   --line: rgba(50, 84, 172, 0.2);
   --line-strong: rgba(50, 84, 172, 0.35);
   --shadow: 0 28px 70px rgba(60, 86, 146, 0.2);
+  --reactor-grid-size: 56px;
+  --reactor-blob-blur: 70px;
+  --reactor-blob-opacity: 0.43;
+  --reactor-drift-duration: 14s;
+  --reactor-body-shift: 0px;
 }
 
 html[data-theme="dark"] {
@@ -28,6 +33,34 @@ html[data-theme="dark"] {
   --shadow: 0 34px 80px rgba(0, 0, 0, 0.5);
 }
 
+html[data-theme="dark"][data-theme-variant="neon"] {
+  --accent: #4ff7ff;
+  --accent-2: #4d6dff;
+  --line: rgba(144, 191, 255, 0.22);
+  --line-strong: rgba(144, 191, 255, 0.44);
+}
+
+html[data-theme="dark"][data-theme-variant="ember"] {
+  --accent: #ffb36b;
+  --accent-2: #ff6c57;
+  --line: rgba(255, 160, 113, 0.22);
+  --line-strong: rgba(255, 160, 113, 0.4);
+}
+
+html[data-theme="light"][data-theme-variant="glacier"] {
+  --accent: #26dcff;
+  --accent-2: #2f7cff;
+  --line: rgba(72, 118, 208, 0.2);
+  --line-strong: rgba(72, 118, 208, 0.36);
+}
+
+html[data-theme="light"][data-theme-variant="dawn"] {
+  --accent: #ffb04f;
+  --accent-2: #ff7e5f;
+  --line: rgba(193, 121, 92, 0.2);
+  --line-strong: rgba(193, 121, 92, 0.36);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -40,13 +73,29 @@ body {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 10% 12%, rgba(79, 128, 255, 0.16), transparent 42%),
-    radial-gradient(circle at 86% 15%, rgba(12, 224, 255, 0.15), transparent 38%),
+    radial-gradient(circle at calc(10% + var(--reactor-body-shift)) 12%, rgba(79, 128, 255, 0.16), transparent 42%),
+    radial-gradient(circle at calc(86% - var(--reactor-body-shift)) 15%, rgba(12, 224, 255, 0.15), transparent 38%),
     linear-gradient(170deg, var(--bg) 0%, var(--bg-2) 100%);
   transition: background 320ms ease, color 260ms ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(112, 142, 216, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(112, 142, 216, 0.09) 1px, transparent 1px);
+  background-size: var(--reactor-grid-size) var(--reactor-grid-size);
+  opacity: calc(var(--reactor-blob-opacity) * 0.55);
+  transition: background-size 220ms ease, opacity 220ms ease;
 }
 
 a {
@@ -54,11 +103,17 @@ a {
   text-decoration: none;
 }
 
-.theme-toggle {
+.theme-toggle-wrap {
   position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: 40;
+  display: grid;
+  justify-items: end;
+  gap: 0.42rem;
+}
+
+.theme-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -106,6 +161,69 @@ a {
   box-shadow: 0 0 0 3px rgba(255, 196, 87, 0.26);
 }
 
+.theme-expand {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  background: var(--surface-strong);
+  color: var(--text);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  font-size: 0.92rem;
+  line-height: 1;
+  transition: transform 170ms ease, border-color 170ms ease;
+}
+
+.theme-expand:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+}
+
+.theme-expand.is-open {
+  transform: rotate(90deg);
+}
+
+.theme-presets {
+  width: min(210px, 70vw);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+  padding: 0.5rem;
+  display: grid;
+  gap: 0.36rem;
+}
+
+.theme-preset {
+  width: 100%;
+  text-align: left;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(111, 147, 238, 0.1);
+  color: var(--text);
+  padding: 0.46rem 0.56rem;
+  font-size: 0.79rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.theme-preset:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+}
+
+.theme-preset.is-active {
+  border-color: var(--accent);
+  background: linear-gradient(140deg, rgba(87, 238, 255, 0.2), rgba(112, 145, 255, 0.18));
+}
+
 .landing-shell {
   position: relative;
   overflow: hidden;
@@ -119,17 +237,17 @@ a {
   background-image:
     linear-gradient(rgba(112, 142, 216, 0.09) 1px, transparent 1px),
     linear-gradient(90deg, rgba(112, 142, 216, 0.09) 1px, transparent 1px);
-  background-size: 56px 56px;
+  background-size: var(--reactor-grid-size) var(--reactor-grid-size);
   mask-image: radial-gradient(circle at center, black 35%, transparent 92%);
 }
 
 .ambient-blob {
   position: absolute;
   border-radius: 999px;
-  filter: blur(70px);
-  opacity: 0.43;
+  filter: blur(var(--reactor-blob-blur));
+  opacity: var(--reactor-blob-opacity);
   z-index: -2;
-  animation: drift 14s ease-in-out infinite;
+  animation: drift var(--reactor-drift-duration) ease-in-out infinite;
 }
 
 .ambient-blob-a {
@@ -738,7 +856,7 @@ h1 {
 .command-launcher {
   position: fixed;
   left: 1rem;
-  bottom: 1rem;
+  top: 1rem;
   z-index: 45;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
@@ -751,7 +869,7 @@ h1 {
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
   cursor: pointer;
-  transition: transform 150ms ease, border-color 160ms ease;
+  transition: transform 190ms ease, border-color 160ms ease, opacity 190ms ease;
 }
 
 .command-launcher:hover {
@@ -764,6 +882,12 @@ h1 {
   font-weight: 720;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.command-launcher.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-14px);
 }
 
 .command-launcher kbd {
@@ -962,6 +1086,17 @@ h1 {
   gap: 0.72rem;
 }
 
+.reactor-note {
+  margin: 0;
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  background: rgba(118, 151, 246, 0.1);
+  color: var(--muted);
+  padding: 0.5rem 0.56rem;
+  font-size: 0.76rem;
+  line-height: 1.42;
+}
+
 .reactor-controls label {
   display: grid;
   gap: 0.3rem;
@@ -1145,11 +1280,16 @@ h1 {
 
   .command-launcher {
     left: 0.7rem;
-    bottom: 0.7rem;
+    top: 0.7rem;
   }
 
   .command-launcher kbd {
     display: none;
+  }
+
+  .theme-toggle-wrap {
+    top: 0.7rem;
+    right: 0.7rem;
   }
 }
 

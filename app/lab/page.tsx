@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const modules = [
   {
@@ -30,6 +30,63 @@ const modules = [
   },
 ];
 
+const REACTOR_BG_STORAGE_KEY = "shadowlab-reactor-background";
+
+type ReactorBackgroundState = {
+  glowStrength: number;
+  gridDensity: number;
+  driftAmount: number;
+};
+
+function applyReactorBackground({
+  glowStrength,
+  gridDensity,
+  driftAmount,
+}: ReactorBackgroundState) {
+  const root = document.documentElement;
+
+  const gridSize = Math.round(gridDensity * 1.65);
+  const blobBlur = Math.round(36 + glowStrength * 0.72);
+  const blobOpacity = (0.2 + glowStrength / 240).toFixed(2);
+  const driftDuration = Math.max(8.5, 20 - driftAmount * 0.62).toFixed(2);
+  const bodyShift = Math.round(driftAmount * 2.2);
+
+  root.style.setProperty("--reactor-grid-size", `${gridSize}px`);
+  root.style.setProperty("--reactor-blob-blur", `${blobBlur}px`);
+  root.style.setProperty("--reactor-blob-opacity", blobOpacity);
+  root.style.setProperty("--reactor-drift-duration", `${driftDuration}s`);
+  root.style.setProperty("--reactor-body-shift", `${bodyShift}px`);
+}
+
+function parseStoredBackground(raw: string | null): ReactorBackgroundState | null {
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as Partial<ReactorBackgroundState>;
+    const glowStrength = Number(parsed.glowStrength);
+    const gridDensity = Number(parsed.gridDensity);
+    const driftAmount = Number(parsed.driftAmount);
+
+    if (
+      Number.isNaN(glowStrength) ||
+      Number.isNaN(gridDensity) ||
+      Number.isNaN(driftAmount)
+    ) {
+      return null;
+    }
+
+    return {
+      glowStrength: Math.min(100, Math.max(20, glowStrength)),
+      gridDensity: Math.min(58, Math.max(18, gridDensity)),
+      driftAmount: Math.min(18, Math.max(0, driftAmount)),
+    };
+  } catch {
+    return null;
+  }
+}
+
 export default function Page() {
   const [glowStrength, setGlowStrength] = useState(64);
   const [gridDensity, setGridDensity] = useState(34);
@@ -37,6 +94,31 @@ export default function Page() {
 
   const hazeOpacity = 0.2 + glowStrength / 300;
   const coreOffset = driftAmount * 0.6;
+
+  useEffect(() => {
+    const stored = parseStoredBackground(
+      window.localStorage.getItem(REACTOR_BG_STORAGE_KEY),
+    );
+
+    if (!stored) {
+      applyReactorBackground({ glowStrength, gridDensity, driftAmount });
+      return;
+    }
+
+    setGlowStrength(stored.glowStrength);
+    setGridDensity(stored.gridDensity);
+    setDriftAmount(stored.driftAmount);
+    applyReactorBackground(stored);
+  }, []);
+
+  useEffect(() => {
+    const backgroundState = { glowStrength, gridDensity, driftAmount };
+    applyReactorBackground(backgroundState);
+    window.localStorage.setItem(
+      REACTOR_BG_STORAGE_KEY,
+      JSON.stringify(backgroundState),
+    );
+  }, [driftAmount, glowStrength, gridDensity]);
 
   return (
     <main className="subpage-shell">
@@ -69,6 +151,10 @@ export default function Page() {
             </div>
 
             <div className="reactor-controls">
+              <p className="reactor-note">
+                Reactor tuning changes global background behavior. Theme presets determine color.
+              </p>
+
               <label>
                 Glow Strength <span>{glowStrength}</span>
                 <input
