@@ -111,10 +111,10 @@ export default function CommandPalette() {
         type="button"
         className={`command-launcher ${isLauncherHidden && !isOpen ? "is-hidden" : ""}`}
         onClick={() => setIsOpen(true)}
-        aria-label="Open command palette"
+        aria-label="Open navigation"
       >
-        <span>Command Layer</span>
-        <kbd>Ctrl / Cmd + K</kbd>
+        <span>Navigation</span>
+        <kbd>Ctrl + K</kbd>
       </button>
 
       {isOpen ? (
