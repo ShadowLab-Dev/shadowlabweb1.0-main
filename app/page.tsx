@@ -587,7 +587,7 @@ export default function Home() {
         <div className="welcome-inner">
           <div className="welcome-copy reveal in-view">
             <p className="micro-label">shadowlab.dev / gateway</p>
-            <h1>Welcome to Shadowlab</h1>
+            <h1>Welcome to ShadowLab</h1>
             <p>
               A digital experiment facility for testing visuals, interfaces, and unusual web ideas.
               Select a sector, or press Enter to drop into the arcade.
