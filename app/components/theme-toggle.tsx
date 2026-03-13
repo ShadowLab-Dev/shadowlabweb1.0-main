@@ -143,26 +143,28 @@ export default function ThemeToggle() {
 
   return (
     <div className="theme-toggle-wrap" ref={containerRef}>
-      <button
-        type="button"
-        className="theme-toggle"
-        onClick={toggleThemeMode}
-        aria-label="Toggle dark and light mode"
-        title="Toggle dark and light mode"
-      >
-        <span className={`theme-dot ${themeMode === "dark" ? "is-dark" : "is-light"}`} />
-        <span>{label}</span>
-      </button>
+      <div className="theme-toggle-combo">
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleThemeMode}
+          aria-label="Toggle dark and light mode"
+          title="Toggle dark and light mode"
+        >
+          <span className={`theme-dot ${themeMode === "dark" ? "is-dark" : "is-light"}`} />
+          <span>{label}</span>
+        </button>
 
-      <button
-        type="button"
-        className={`theme-expand ${isExpanded ? "is-open" : ""}`}
-        onClick={() => setIsExpanded((current) => !current)}
-        aria-label="Expand theme presets"
-        aria-expanded={isExpanded}
-      >
-        &gt;
-      </button>
+        <button
+          type="button"
+          className={`theme-expand ${isExpanded ? "is-open" : ""}`}
+          onClick={() => setIsExpanded((current) => !current)}
+          aria-label="Expand theme presets"
+          aria-expanded={isExpanded}
+        >
+          &gt;
+        </button>
+      </div>
 
       {isExpanded ? (
         <div className="theme-presets" role="menu" aria-label={`${themeMode} mode presets`}>
