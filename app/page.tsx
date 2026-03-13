@@ -6,33 +6,33 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 const gatewayBoxes = [
   {
     href: "/studio",
-    title: "Studio",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere sapien id tortor cursus, vitae convallis arcu dictum.",
+    title: "Reactor",
+    body: "Tune panel glow, motion pressure, and UI atmosphere in the live reactor bay.",
   },
   {
     href: "/work",
-    title: "Work",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ultricies nisl at neque tristique, in interdum nunc aliquam.",
+    title: "Vault",
+    body: "Prototype worlds, interface systems, and concept builds staged for review.",
   },
   {
     href: "/contact",
-    title: "Contact",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec varius urna ac lacus volutpat, in pharetra felis facilisis.",
+    title: "Signal",
+    body: "Outbound references, relays, and utility links collected for fast access.",
   },
   {
     href: "/lab",
-    title: "Lab",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum volutpat velit sit amet massa vulputate, non feugiat est posuere.",
+    title: "Experiments",
+    body: "Interactive visual tests and motion probes running in the active sector.",
   },
   {
     href: "/about",
-    title: "About",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dictum tellus in ligula commodo, vel posuere massa hendrerit.",
+    title: "Archive",
+    body: "Curated websites and references cataloged for design and interface research.",
   },
   {
     href: "/updates",
-    title: "Updates",
-    body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque accumsan justo at lectus blandit, vitae semper leo commodo.",
+    title: "Logs",
+    body: "Transmission notes on what was tested, tuned, and discovered in ShadowLab.",
   },
 ];
 
@@ -589,8 +589,8 @@ export default function Home() {
             <p className="micro-label">shadowlab.dev / gateway</p>
             <h1>Welcome to Shadowlab</h1>
             <p>
-              A modern, futuristic front page designed as a redirect hub.
-              Select a destination box, or press Enter to drop into the arcade.
+              A digital experiment facility for testing visuals, interfaces, and unusual web ideas.
+              Select a sector, or press Enter to drop into the arcade.
             </p>
             <a className="enter-link" href="#games">
               <span>Enter</span>

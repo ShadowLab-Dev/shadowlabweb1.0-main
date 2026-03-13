@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import CommandPalette from "./components/command-palette";
 import ThemeToggle from "./components/theme-toggle";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeToggle />
+        <CommandPalette />
         {children}
       </body>
     </html>

@@ -735,6 +735,361 @@ h1 {
   font-weight: 650;
 }
 
+.command-launcher {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 45;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-strong);
+  color: var(--text);
+  padding: 0.46rem 0.64rem 0.46rem 0.76rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.56rem;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 160ms ease;
+}
+
+.command-launcher:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.command-launcher span {
+  font-size: 0.78rem;
+  font-weight: 720;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.command-launcher kbd {
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(121, 149, 235, 0.12);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.68rem;
+  font-family: var(--font-geist-mono), "Consolas", monospace;
+  color: var(--muted);
+}
+
+.command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: rgba(5, 12, 27, 0.58);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: start center;
+  padding: 14svh 1rem 1rem;
+}
+
+.command-panel {
+  width: min(760px, 100%);
+  border-radius: 18px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.command-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.command-close {
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(121, 149, 235, 0.12);
+  color: var(--text);
+  padding: 0.24rem 0.54rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.command-input {
+  margin-top: 0.72rem;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  padding: 0.74rem 0.82rem;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.command-list {
+  margin-top: 0.78rem;
+  display: grid;
+  gap: 0.56rem;
+}
+
+.command-item {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(121, 149, 235, 0.09);
+  padding: 0.72rem 0.8rem;
+  display: grid;
+  gap: 0.22rem;
+  transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.command-item:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  background: rgba(114, 157, 255, 0.14);
+}
+
+.command-item span {
+  font-size: 0.92rem;
+  font-weight: 710;
+  letter-spacing: -0.01em;
+}
+
+.command-item small {
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 0.8rem;
+}
+
+.command-item code {
+  color: var(--accent-2);
+  font-size: 0.76rem;
+  font-family: var(--font-geist-mono), "Consolas", monospace;
+}
+
+.command-empty {
+  border-radius: 11px;
+  border: 1px dashed var(--line-strong);
+  background: rgba(121, 149, 235, 0.08);
+  color: var(--muted);
+  font-size: 0.86rem;
+  padding: 0.74rem 0.8rem;
+}
+
+.sector-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.sector-card h2 {
+  margin: 0;
+  font-size: 1.06rem;
+  letter-spacing: -0.01em;
+}
+
+.experiments-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 0.9rem;
+}
+
+.reactor-panel,
+.experiments-modules {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  padding: 0.9rem;
+}
+
+.reactor-preview {
+  margin-top: 0.7rem;
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  min-height: 220px;
+  background: linear-gradient(170deg, rgba(7, 16, 36, 0.92), rgba(7, 15, 31, 0.68));
+  overflow: hidden;
+  display: grid;
+  place-items: end start;
+  padding: 0.7rem;
+}
+
+.reactor-preview p {
+  margin: 0;
+  z-index: 4;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(207, 219, 255, 0.74);
+}
+
+.reactor-haze {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(84, 240, 255, 0.45), transparent 42%),
+    radial-gradient(circle at 78% 14%, rgba(88, 119, 255, 0.34), transparent 38%);
+  filter: blur(18px);
+  z-index: 1;
+}
+
+.reactor-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(111, 148, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 148, 255, 0.2) 1px, transparent 1px);
+  z-index: 2;
+}
+
+.reactor-core {
+  position: absolute;
+  width: 134px;
+  height: 134px;
+  right: 9%;
+  bottom: 14%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(130, 253, 255, 0.82) 0%, rgba(92, 176, 255, 0.45) 45%, rgba(77, 124, 255, 0.06) 72%);
+  box-shadow:
+    0 0 0 1px rgba(122, 160, 255, 0.24),
+    0 0 44px rgba(103, 208, 255, 0.42);
+  z-index: 3;
+  transition: transform 280ms ease;
+}
+
+.reactor-controls {
+  margin-top: 0.76rem;
+  display: grid;
+  gap: 0.72rem;
+}
+
+.reactor-controls label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+
+.reactor-controls span {
+  color: var(--accent-2);
+  margin-left: 0.36rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.reactor-controls input[type="range"] {
+  width: 100%;
+}
+
+.experiments-list {
+  margin-top: 0.72rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.experiments-item {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(121, 149, 235, 0.08);
+  padding: 0.66rem 0.72rem;
+}
+
+.experiments-item h3 {
+  margin-top: 0.32rem;
+  font-size: 0.94rem;
+}
+
+.experiments-item p {
+  margin-top: 0.32rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.experiments-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+.module-status {
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 190, 93, 0.18);
+  color: rgba(146, 82, 10, 0.95);
+  padding: 0.2rem 0.44rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 760;
+}
+
+.module-status.is-online {
+  background: rgba(103, 250, 207, 0.22);
+  color: rgba(12, 121, 90, 0.95);
+}
+
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.76rem;
+}
+
+.archive-card {
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  padding: 0.86rem 0.9rem;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.archive-meta span {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(114, 157, 255, 0.14);
+  color: var(--muted);
+  padding: 0.24rem 0.48rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 710;
+}
+
+.archive-card h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.archive-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.archive-card a {
+  margin-top: 0.26rem;
+  justify-self: start;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(115, 161, 255, 0.15);
+  color: var(--text);
+  padding: 0.34rem 0.66rem;
+  font-size: 0.77rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-weight: 710;
+  transition: transform 150ms ease, border-color 160ms ease;
+}
+
+.archive-card a:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
 @keyframes sweepButton {
   0% {
     transform: translateX(0) skewX(-28deg);
@@ -778,6 +1133,24 @@ h1 {
   .reveal-games-button {
     width: 100%;
   }
+
+  .experiments-grid,
+  .archive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .command-panel {
+    padding: 0.85rem;
+  }
+
+  .command-launcher {
+    left: 0.7rem;
+    bottom: 0.7rem;
+  }
+
+  .command-launcher kbd {
+    display: none;
+  }
 }
 
 @media (max-width: 620px) {
@@ -787,6 +1160,14 @@ h1 {
 
   .swatch-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .command-overlay {
+    padding-top: 11svh;
+  }
+
+  .reactor-preview {
+    min-height: 185px;
   }
 }
 
