@@ -20,13 +20,15 @@ export const metadata: Metadata = {
     "Welcome To The Shadow Lab Testing Ground!",
 };
 
+const ENABLE_THEME_GLOW = true;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme-glow={ENABLE_THEME_GLOW ? "on" : "off"}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
