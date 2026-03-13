@@ -16,6 +16,12 @@ type ThemeVariant =
   | "alloy"
   | "inferno"
   | "midnight"
+  | "abyss"
+  | "royal"
+  | "acid"
+  | "carbon"
+  | "crimson"
+  | "arctic"
   | "glacier"
   | "dawn"
   | "solar"
@@ -26,7 +32,13 @@ type ThemeVariant =
   | "sky"
   | "lavender"
   | "sand"
-  | "mono";
+  | "mono"
+  | "coral"
+  | "ocean"
+  | "orchid"
+  | "forest"
+  | "cherry"
+  | "ivory";
 type ThemePresetMap = {
   dark: ThemeVariant;
   light: ThemeVariant;
@@ -48,6 +60,12 @@ const DARK_VARIANTS: ThemeVariant[] = [
   "alloy",
   "inferno",
   "midnight",
+  "abyss",
+  "royal",
+  "acid",
+  "carbon",
+  "crimson",
+  "arctic",
 ];
 
 const LIGHT_VARIANTS: ThemeVariant[] = [
@@ -63,6 +81,12 @@ const LIGHT_VARIANTS: ThemeVariant[] = [
   "lavender",
   "sand",
   "mono",
+  "coral",
+  "ocean",
+  "orchid",
+  "forest",
+  "cherry",
+  "ivory",
 ];
 
 const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>> = {
@@ -79,6 +103,12 @@ const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>
     { id: "alloy", label: "Alloy Dark" },
     { id: "inferno", label: "Inferno Dark" },
     { id: "midnight", label: "Midnight Dark" },
+    { id: "abyss", label: "Abyss Dark" },
+    { id: "royal", label: "Royal Dark" },
+    { id: "acid", label: "Acid Dark" },
+    { id: "carbon", label: "Carbon Dark" },
+    { id: "crimson", label: "Crimson Dark" },
+    { id: "arctic", label: "Arctic Dark" },
   ],
   light: [
     { id: "default", label: "Core Light" },
@@ -93,6 +123,12 @@ const modeVariants: Record<ThemeMode, Array<{ id: ThemeVariant; label: string }>
     { id: "lavender", label: "Lavender Light" },
     { id: "sand", label: "Sand Light" },
     { id: "mono", label: "Mono Light" },
+    { id: "coral", label: "Coral Light" },
+    { id: "ocean", label: "Ocean Light" },
+    { id: "orchid", label: "Orchid Light" },
+    { id: "forest", label: "Forest Light" },
+    { id: "cherry", label: "Cherry Light" },
+    { id: "ivory", label: "Ivory Light" },
   ],
 };
 

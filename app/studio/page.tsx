@@ -40,6 +40,26 @@ type ReactorBackgroundState = {
   gridPresence: number;
   orbitOffset: number;
   gradientTilt: number;
+  blobScale: number;
+  gridTilt: number;
+  atmosphere: number;
+  vignette: number;
+  axisShift: number;
+};
+
+const DEFAULT_REACTOR_STATE: ReactorBackgroundState = {
+  glowStrength: 64,
+  gridDensity: 34,
+  driftAmount: 8,
+  motionTempo: 64,
+  gridPresence: 74,
+  orbitOffset: 0,
+  gradientTilt: 170,
+  blobScale: 100,
+  gridTilt: 0,
+  atmosphere: 18,
+  vignette: 14,
+  axisShift: 0,
 };
 
 function clamp(value: number, min: number, max: number) {
@@ -54,6 +74,11 @@ function applyReactorBackground({
   gridPresence,
   orbitOffset,
   gradientTilt,
+  blobScale,
+  gridTilt,
+  atmosphere,
+  vignette,
+  axisShift,
 }: ReactorBackgroundState) {
   const root = document.documentElement;
 
@@ -63,6 +88,9 @@ function applyReactorBackground({
   const driftDuration = Math.max(6.2, 25 - motionTempo * 0.16 - driftAmount * 0.42).toFixed(2);
   const bodyShift = Math.round(driftAmount * 2 + orbitOffset * 0.3);
   const gridOpacity = (gridPresence / 100).toFixed(2);
+  const blobScaleValue = (blobScale / 100).toFixed(2);
+  const atmosphereOpacity = (atmosphere / 100).toFixed(2);
+  const vignetteOpacity = (vignette / 100).toFixed(2);
 
   root.style.setProperty("--reactor-grid-size", `${gridSize}px`);
   root.style.setProperty("--reactor-blob-blur", `${blobBlur}px`);
@@ -72,6 +100,11 @@ function applyReactorBackground({
   root.style.setProperty("--reactor-grid-opacity", gridOpacity);
   root.style.setProperty("--reactor-blob-shift", `${orbitOffset}px`);
   root.style.setProperty("--reactor-gradient-angle", `${gradientTilt}deg`);
+  root.style.setProperty("--reactor-blob-scale", blobScaleValue);
+  root.style.setProperty("--reactor-grid-tilt", `${gridTilt}deg`);
+  root.style.setProperty("--reactor-atmos-opacity", atmosphereOpacity);
+  root.style.setProperty("--reactor-vignette-strength", vignetteOpacity);
+  root.style.setProperty("--reactor-axis-shift", `${axisShift}px`);
 }
 
 function parseStoredBackground(raw: string | null): ReactorBackgroundState | null {
@@ -81,34 +114,25 @@ function parseStoredBackground(raw: string | null): ReactorBackgroundState | nul
 
   try {
     const parsed = JSON.parse(raw) as Partial<ReactorBackgroundState>;
-    const glowStrength = Number(parsed.glowStrength);
-    const gridDensity = Number(parsed.gridDensity);
-    const driftAmount = Number(parsed.driftAmount);
-    const motionTempo = Number(parsed.motionTempo);
-    const gridPresence = Number(parsed.gridPresence);
-    const orbitOffset = Number(parsed.orbitOffset);
-    const gradientTilt = Number(parsed.gradientTilt);
 
-    if (
-      Number.isNaN(glowStrength) ||
-      Number.isNaN(gridDensity) ||
-      Number.isNaN(driftAmount) ||
-      Number.isNaN(motionTempo) ||
-      Number.isNaN(gridPresence) ||
-      Number.isNaN(orbitOffset) ||
-      Number.isNaN(gradientTilt)
-    ) {
-      return null;
-    }
+    const numberOrFallback = (value: unknown, fallback: number) => {
+      const parsedValue = Number(value);
+      return Number.isNaN(parsedValue) ? fallback : parsedValue;
+    };
 
     return {
-      glowStrength: clamp(glowStrength, 20, 100),
-      gridDensity: clamp(gridDensity, 18, 58),
-      driftAmount: clamp(driftAmount, 0, 18),
-      motionTempo: clamp(motionTempo, 20, 100),
-      gridPresence: clamp(gridPresence, 20, 100),
-      orbitOffset: clamp(orbitOffset, -40, 40),
-      gradientTilt: clamp(gradientTilt, 140, 200),
+      glowStrength: clamp(numberOrFallback(parsed.glowStrength, DEFAULT_REACTOR_STATE.glowStrength), 20, 100),
+      gridDensity: clamp(numberOrFallback(parsed.gridDensity, DEFAULT_REACTOR_STATE.gridDensity), 18, 58),
+      driftAmount: clamp(numberOrFallback(parsed.driftAmount, DEFAULT_REACTOR_STATE.driftAmount), 0, 18),
+      motionTempo: clamp(numberOrFallback(parsed.motionTempo, DEFAULT_REACTOR_STATE.motionTempo), 20, 100),
+      gridPresence: clamp(numberOrFallback(parsed.gridPresence, DEFAULT_REACTOR_STATE.gridPresence), 20, 100),
+      orbitOffset: clamp(numberOrFallback(parsed.orbitOffset, DEFAULT_REACTOR_STATE.orbitOffset), -40, 40),
+      gradientTilt: clamp(numberOrFallback(parsed.gradientTilt, DEFAULT_REACTOR_STATE.gradientTilt), 140, 200),
+      blobScale: clamp(numberOrFallback(parsed.blobScale, DEFAULT_REACTOR_STATE.blobScale), 70, 140),
+      gridTilt: clamp(numberOrFallback(parsed.gridTilt, DEFAULT_REACTOR_STATE.gridTilt), -18, 18),
+      atmosphere: clamp(numberOrFallback(parsed.atmosphere, DEFAULT_REACTOR_STATE.atmosphere), 8, 40),
+      vignette: clamp(numberOrFallback(parsed.vignette, DEFAULT_REACTOR_STATE.vignette), 0, 44),
+      axisShift: clamp(numberOrFallback(parsed.axisShift, DEFAULT_REACTOR_STATE.axisShift), -24, 24),
     };
   } catch {
     return null;
@@ -116,16 +140,21 @@ function parseStoredBackground(raw: string | null): ReactorBackgroundState | nul
 }
 
 export default function Page() {
-  const [glowStrength, setGlowStrength] = useState(64);
-  const [gridDensity, setGridDensity] = useState(34);
-  const [driftAmount, setDriftAmount] = useState(8);
-  const [motionTempo, setMotionTempo] = useState(64);
-  const [gridPresence, setGridPresence] = useState(74);
-  const [orbitOffset, setOrbitOffset] = useState(0);
-  const [gradientTilt, setGradientTilt] = useState(170);
+  const [glowStrength, setGlowStrength] = useState(DEFAULT_REACTOR_STATE.glowStrength);
+  const [gridDensity, setGridDensity] = useState(DEFAULT_REACTOR_STATE.gridDensity);
+  const [driftAmount, setDriftAmount] = useState(DEFAULT_REACTOR_STATE.driftAmount);
+  const [motionTempo, setMotionTempo] = useState(DEFAULT_REACTOR_STATE.motionTempo);
+  const [gridPresence, setGridPresence] = useState(DEFAULT_REACTOR_STATE.gridPresence);
+  const [orbitOffset, setOrbitOffset] = useState(DEFAULT_REACTOR_STATE.orbitOffset);
+  const [gradientTilt, setGradientTilt] = useState(DEFAULT_REACTOR_STATE.gradientTilt);
+  const [blobScale, setBlobScale] = useState(DEFAULT_REACTOR_STATE.blobScale);
+  const [gridTilt, setGridTilt] = useState(DEFAULT_REACTOR_STATE.gridTilt);
+  const [atmosphere, setAtmosphere] = useState(DEFAULT_REACTOR_STATE.atmosphere);
+  const [vignette, setVignette] = useState(DEFAULT_REACTOR_STATE.vignette);
+  const [axisShift, setAxisShift] = useState(DEFAULT_REACTOR_STATE.axisShift);
 
   const hazeOpacity = 0.18 + glowStrength / 290;
-  const coreOffset = driftAmount * 0.55 + orbitOffset * 0.18;
+  const coreOffset = driftAmount * 0.55 + orbitOffset * 0.18 + axisShift * 0.12;
 
   useEffect(() => {
     const stored = parseStoredBackground(
@@ -141,6 +170,11 @@ export default function Page() {
         gridPresence,
         orbitOffset,
         gradientTilt,
+        blobScale,
+        gridTilt,
+        atmosphere,
+        vignette,
+        axisShift,
       });
       return;
     }
@@ -152,6 +186,11 @@ export default function Page() {
     setGridPresence(stored.gridPresence);
     setOrbitOffset(stored.orbitOffset);
     setGradientTilt(stored.gradientTilt);
+    setBlobScale(stored.blobScale);
+    setGridTilt(stored.gridTilt);
+    setAtmosphere(stored.atmosphere);
+    setVignette(stored.vignette);
+    setAxisShift(stored.axisShift);
     applyReactorBackground(stored);
   }, []);
 
@@ -164,6 +203,11 @@ export default function Page() {
       gridPresence,
       orbitOffset,
       gradientTilt,
+      blobScale,
+      gridTilt,
+      atmosphere,
+      vignette,
+      axisShift,
     };
     applyReactorBackground(state);
     window.localStorage.setItem(REACTOR_BG_STORAGE_KEY, JSON.stringify(state));
@@ -175,7 +219,27 @@ export default function Page() {
     gridPresence,
     motionTempo,
     orbitOffset,
+    blobScale,
+    gridTilt,
+    atmosphere,
+    vignette,
+    axisShift,
   ]);
+
+  const resetReactor = () => {
+    setGlowStrength(DEFAULT_REACTOR_STATE.glowStrength);
+    setGridDensity(DEFAULT_REACTOR_STATE.gridDensity);
+    setDriftAmount(DEFAULT_REACTOR_STATE.driftAmount);
+    setMotionTempo(DEFAULT_REACTOR_STATE.motionTempo);
+    setGridPresence(DEFAULT_REACTOR_STATE.gridPresence);
+    setOrbitOffset(DEFAULT_REACTOR_STATE.orbitOffset);
+    setGradientTilt(DEFAULT_REACTOR_STATE.gradientTilt);
+    setBlobScale(DEFAULT_REACTOR_STATE.blobScale);
+    setGridTilt(DEFAULT_REACTOR_STATE.gridTilt);
+    setAtmosphere(DEFAULT_REACTOR_STATE.atmosphere);
+    setVignette(DEFAULT_REACTOR_STATE.vignette);
+    setAxisShift(DEFAULT_REACTOR_STATE.axisShift);
+  };
 
   return (
     <main className="subpage-shell">
@@ -289,6 +353,65 @@ export default function Page() {
                   onChange={(event) => setGradientTilt(Number(event.target.value))}
                 />
               </label>
+
+              <label>
+                Blob Scale <span>{blobScale}%</span>
+                <input
+                  type="range"
+                  min={70}
+                  max={140}
+                  value={blobScale}
+                  onChange={(event) => setBlobScale(Number(event.target.value))}
+                />
+              </label>
+
+              <label>
+                Grid Tilt <span>{gridTilt}deg</span>
+                <input
+                  type="range"
+                  min={-18}
+                  max={18}
+                  value={gridTilt}
+                  onChange={(event) => setGridTilt(Number(event.target.value))}
+                />
+              </label>
+
+              <label>
+                Atmosphere <span>{atmosphere}%</span>
+                <input
+                  type="range"
+                  min={8}
+                  max={40}
+                  value={atmosphere}
+                  onChange={(event) => setAtmosphere(Number(event.target.value))}
+                />
+              </label>
+
+              <label>
+                Vignette <span>{vignette}%</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={44}
+                  value={vignette}
+                  onChange={(event) => setVignette(Number(event.target.value))}
+                />
+              </label>
+
+              <label>
+                Axis Shift <span>{axisShift}px</span>
+                <input
+                  type="range"
+                  min={-24}
+                  max={24}
+                  value={axisShift}
+                  onChange={(event) => setAxisShift(Number(event.target.value))}
+                />
+              </label>
+
+              <button type="button" className="reactor-reset game-ghost" onClick={resetReactor}>
+                Reset To Defaults
+              </button>
             </div>
           </article>
 

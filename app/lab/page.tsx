@@ -39,8 +39,8 @@ export default function Page() {
           ))}
         </div>
 
-        <Link className="subpage-back" href="/studio">
-          Open Reactor
+        <Link className="subpage-back" href="/">
+          Return to Gateway
         </Link>
       </section>
     </main>
